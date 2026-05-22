@@ -76,29 +76,31 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
       className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center mb-24"
     >
       {/* Image */}
-      <div className="relative glass gold-border rounded-3xl bg-white p-8 md:p-12 flex items-center justify-center min-h-[380px] md:min-h-[480px]">
-        {perfume.best_seller && (
-          <div className="absolute top-5 left-5 bg-gradient-gold text-primary-foreground text-[10px] tracking-widest px-3 py-1 rounded-full font-medium uppercase">
-            Best Seller
-          </div>
-        )}
-        {out && (
-          <div className="absolute top-5 left-5 bg-destructive/90 text-destructive-foreground text-[10px] tracking-widest px-3 py-1 rounded-full font-medium uppercase">
-            Rupture de stock
-          </div>
-        )}
-        {low && !out && (
-          <div className="absolute top-5 left-5 bg-amber-500/90 text-black text-[10px] tracking-widest px-3 py-1 rounded-full font-medium uppercase">
-            Stock limité
-          </div>
-        )}
+      <div className="relative glass gold-border rounded-3xl bg-black overflow-hidden flex items-center justify-center min-h-[380px] md:min-h-[480px]">
+        <div className="absolute top-5 left-5 z-10 flex flex-col gap-1.5 items-start">
+          {perfume.best_seller && (
+            <div className="bg-gradient-gold text-primary-foreground text-[10px] tracking-widest px-3 py-1 rounded-full font-medium uppercase">
+              Best Seller
+            </div>
+          )}
+          {out && (
+            <div className="bg-destructive/90 text-destructive-foreground text-[10px] tracking-widest px-3 py-1 rounded-full font-medium uppercase">
+              Rupture de stock
+            </div>
+          )}
+          {low && !out && (
+            <div className="bg-amber-500/90 text-black text-[10px] tracking-widest px-3 py-1 rounded-full font-medium uppercase">
+              Stock limité
+            </div>
+          )}
+        </div>
         <motion.img
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.1 }}
           src={perfume.image_url}
           alt={perfume.name}
-          className="max-h-[380px] w-full object-contain mix-blend-multiply drop-shadow-xl animate-float"
+          className="max-h-[380px] w-full object-contain p-8 md:p-12 drop-shadow-xl animate-float"
         />
       </div>
 
@@ -163,11 +165,11 @@ function RelatedProducts({ perfumes }: { perfumes: Perfume[] }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
         {perfumes.map((p) => (
           <Link key={p.id} to="/parfum/$id" params={{ id: p.id }} className="group glass gold-border rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform">
-            <div className="bg-white p-4 flex items-center justify-center h-40">
+            <div className="bg-black p-4 flex items-center justify-center h-40">
               <img
                 src={p.image_url}
                 alt={p.name}
-                className="h-full object-contain mix-blend-multiply drop-shadow group-hover:scale-110 transition-transform duration-500"
+                className="h-full object-contain drop-shadow group-hover:scale-110 transition-transform duration-500"
               />
             </div>
             <div className="p-4">

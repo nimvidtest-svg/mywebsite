@@ -7,10 +7,12 @@ import bottleRose from "@/assets/bottle-rose.jpg";
 import bottleGold from "@/assets/bottle-gold.jpg";
 import bottlePurple from "@/assets/bottle-purple.jpg";
 
-const BOTTLES_BY_GENDER: Record<"Femme" | "Homme" | "Mixte", string[]> = {
-  Femme: [bottleRose, bottleBurgundy, bottlePurple, bottleTurquoise, bottleGold],
-  Homme: [bottleBlack, bottleNavy, bottleGreen, bottleGold, bottleBurgundy],
-  Mixte: [bottleBlack, bottleGreen, bottleTurquoise, bottlePurple, bottleNavy, bottleGold, bottleBurgundy, bottleRose],
+const BOTTLES_BY_CATEGORY: Record<string, string[]> = {
+  FEMMES:       [bottleRose, bottlePurple, bottleBurgundy, bottleTurquoise],
+  HOMMES:       [bottleBlack, bottleNavy, bottleGreen],
+  NICHE:        [bottleGold, bottlePurple, bottleTurquoise],
+  ORIENTAUX:    [bottleGold, bottleBurgundy, bottleBlack],
+  "BEST SELLERS": [bottleGold],
 };
 
 const hashStr = (s: string) => {
@@ -298,7 +300,7 @@ export const perfumes: Perfume[] = allSeeds.map(({ s, cat }) => {
     gender: s.gender,
     price: 50,
     description: s.description,
-    image: BOTTLES_BY_GENDER[s.gender][hashStr(key) % BOTTLES_BY_GENDER[s.gender].length],
+    image: BOTTLES_BY_CATEGORY[cat][hashStr(key) % BOTTLES_BY_CATEGORY[cat].length],
     bestSeller: s.bestSeller,
   };
 });

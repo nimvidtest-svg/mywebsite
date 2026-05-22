@@ -87,10 +87,12 @@ export interface OfferSettings {
 
 export const categories: Category[] = ["BEST SELLERS", "FEMMES", "HOMMES", "NICHE", "ORIENTAUX"];
 
+const localBottleMap = new Map(localPerfumes.map((p) => [p.id, p.image]));
+
 const applyImages = (rows: Perfume[]): Perfume[] =>
   rows.map((p) => {
     const key = `${_slug(p.brand)}-${_slug(p.name)}`;
-    return { ...p, image_url: perfumeImages[key] ?? p.image_url };
+    return { ...p, image_url: perfumeImages[key] ?? localBottleMap.get(key) ?? p.image_url };
   });
 
 const localFallback = (): Perfume[] =>
@@ -102,7 +104,7 @@ const localFallback = (): Perfume[] =>
     gender: p.gender as Gender,
     price: p.price,
     description: p.description,
-    image_url: perfumeImages[p.id] ?? "",
+    image_url: perfumeImages[p.id] || p.image,
     best_seller: p.bestSeller ?? false,
     sort_order: i,
     scent: "frais" as Scent,
@@ -110,14 +112,18 @@ const localFallback = (): Perfume[] =>
   }));
 
 export async function fetchPerfumes(): Promise<Perfume[]> {
-  const { data, error } = await supabase
-    .from("perfumes")
-    .select("*")
-    .order("sort_order", { ascending: true })
-    .order("name");
-  if (error) throw error;
-  const rows = (data ?? []) as Perfume[];
-  return rows.length ? applyImages(rows) : localFallback();
+  try {
+    const { data, error } = await supabase
+      .from("perfumes")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("name");
+    if (error) throw error;
+    const rows = (data ?? []) as Perfume[];
+    return rows.length ? applyImages(rows) : localFallback();
+  } catch {
+    return localFallback();
+  }
 }
 
 export async function fetchSetting<T = unknown>(key: string): Promise<T | null> {

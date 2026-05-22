@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Search, Loader2 } from "lucide-react";
 import { fetchPerfumes, categories, scents, type Category, type Scent } from "@/lib/api";
 import { PerfumeCard } from "./PerfumeCard";

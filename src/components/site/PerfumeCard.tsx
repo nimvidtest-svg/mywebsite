@@ -40,13 +40,13 @@ export function PerfumeCard({ perfume }: { perfume: Perfume }) {
       <Link
         to="/parfum/$id"
         params={{ id: perfume.id }}
-        className="relative w-full h-[260px] md:h-[320px] bg-white overflow-hidden flex items-center justify-center"
+        className="relative w-full h-[260px] md:h-[320px] bg-black overflow-hidden flex items-center justify-center"
       >
         <img
           src={perfume.image_url}
           alt={perfume.name}
           loading="lazy"
-          className="relative w-full h-full object-contain p-2 md:p-3 group-hover:scale-115 transition-transform duration-700 mix-blend-multiply drop-shadow-lg"
+          className="relative w-full h-full object-contain p-2 md:p-3 group-hover:scale-115 transition-transform duration-700 drop-shadow-lg"
         />
       </Link>
 
