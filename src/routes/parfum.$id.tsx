@@ -100,7 +100,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
           transition={{ duration: 0.7, delay: 0.1 }}
           src={perfume.image_url}
           alt={perfume.name}
-          className="max-h-[380px] w-full object-contain p-8 md:p-12 drop-shadow-xl animate-float"
+          className="w-full h-full object-cover drop-shadow-xl animate-float"
         />
       </div>
 
