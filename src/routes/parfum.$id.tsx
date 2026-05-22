@@ -76,7 +76,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
       className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center mb-24"
     >
       {/* Image */}
-      <div className="relative glass gold-border rounded-3xl bg-black overflow-hidden flex items-center justify-center min-h-[380px] md:min-h-[480px]">
+      <div className="relative glass gold-border rounded-3xl bg-black overflow-hidden flex items-center justify-center h-[280px] md:h-[360px]">
         <div className="absolute top-5 left-5 z-10 flex flex-col gap-1.5 items-start">
           {perfume.best_seller && (
             <div className="bg-gradient-gold text-primary-foreground text-[10px] tracking-widest px-3 py-1 rounded-full font-medium uppercase">
