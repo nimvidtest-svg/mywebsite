@@ -37,7 +37,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 glass-gold rounded-full px-4 py-1.5 mb-6"
           >
             <Sparkles className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs tracking-[0.2em] text-primary uppercase">Maison de Parfum · Paris</span>
+            <span className="text-xs tracking-[0.2em] text-primary uppercase">Unique Parfum · Salé</span>
           </motion.div>
 
           <motion.h1
@@ -46,11 +46,8 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.1 }}
             className="font-display text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-6"
           >
-            <span className="block text-foreground">Unique</span>
-            <span className="flex items-baseline gap-4 flex-wrap">
-              <span className="shimmer-text italic font-light">Parfum</span>
-              <span className="text-gradient-gold italic font-light md:text-6xl lg:text-7xl text-5xl">- Salé</span>
-            </span>
+            <span className="block text-foreground">Discover Your</span>
+            <span className="block shimmer-text italic font-light">Signature Scent</span>
           </motion.h1>
 
           <motion.p
@@ -59,7 +56,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.4 }}
             className="text-lg md:text-xl text-muted-foreground max-w-xl mb-3 font-light"
           >
-            Des fragrances inspirées des plus grandes marques.
+            Premium fragrances inspired by the world's greatest perfume houses.
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
@@ -67,7 +64,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.5 }}
             className="font-display text-3xl md:text-4xl text-gradient-gold mb-10"
           >
-            50 DH seulement.
+            From 50 DH only.
           </motion.p>
 
           <motion.div
@@ -77,14 +74,14 @@ export function Hero() {
             className="flex flex-wrap gap-4"
           >
             <a href="#catalogue" className="px-8 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-105 transition-transform">
-              Voir le Catalogue
+              Shop Now
             </a>
             <button
               type="button"
               onClick={() => openWhatsapp("Bonjour Unique Parfum, je souhaite commander un parfum.")}
               className="px-8 py-4 rounded-full glass-gold text-primary font-medium tracking-wide hover:bg-primary/10 transition"
             >
-              Commander sur WhatsApp
+              Order on WhatsApp
             </button>
           </motion.div>
 

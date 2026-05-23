@@ -4,9 +4,10 @@ import { AnnouncementBar } from "@/components/site/AnnouncementBar";
 import { Hero } from "@/components/site/Hero";
 import { TrustBadges } from "@/components/site/TrustBadges";
 import { SpecialOffer } from "@/components/site/SpecialOffer";
+import { Categories } from "@/components/site/Categories";
 import { BestSellers } from "@/components/site/BestSellers";
+import { About } from "@/components/site/About";
 import { Catalogue } from "@/components/site/Catalogue";
-import { Gallery } from "@/components/site/Gallery";
 import { Reviews } from "@/components/site/Reviews";
 import { OrderForm } from "@/components/site/OrderForm";
 import { Footer } from "@/components/site/Footer";
@@ -33,9 +34,10 @@ function Index() {
         <Hero />
         <TrustBadges />
         <SpecialOffer />
+        <Categories />
         <BestSellers />
+        <About />
         <Catalogue />
-        <Gallery />
         <Reviews />
         <OrderForm />
       </main>
