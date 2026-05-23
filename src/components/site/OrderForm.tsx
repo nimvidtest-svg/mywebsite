@@ -55,7 +55,10 @@ export function OrderForm() {
         total: found ? found.price * d.quantite : null,
         type: "standard", notes: null,
       });
-    } catch (err) { console.error(err); }
+    } catch (err) {
+      console.error("Order insert failed:", err);
+      alert("Erreur DB: " + (err instanceof Error ? err.message : String(err)));
+    }
     const message = `\nBonjour Unique Parfum,\n\nNouvelle commande :\n\n👤 Nom: ${customer_name}\n📞 Téléphone: ${d.telephone}\n🏙️ Ville: ${d.ville}\n🏠 Adresse: ${d.adresse}\n🧴 Parfum: ${d.parfum}\n🔢 Quantité: ${d.quantite}\n`;
     openWhatsapp(message);
   };
