@@ -3,12 +3,12 @@ import logo from "@/assets/logo.png";
 import { openWhatsapp } from "@/lib/whatsapp";
 
 const NAV_LINKS = [
-  { label: "Home", href: "#top" },
-  { label: "Special Offers", href: "#offre" },
+  { label: "Accueil", href: "#top" },
+  { label: "Offres Spéciales", href: "#offre" },
   { label: "Best Sellers", href: "#catalogue" },
   { label: "Catalogue", href: "#catalogue" },
-  { label: "Order", href: "#commander" },
-  { label: "About", href: "#about" },
+  { label: "Commander", href: "#commander" },
+  { label: "À Propos", href: "#about" },
 ];
 
 export function Footer() {
@@ -16,7 +16,7 @@ export function Footer() {
     <footer className="relative border-t border-primary/15 pt-16 pb-8 mt-12">
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
-          {/* Brand */}
+          {/* Marque */}
           <div className="md:col-span-1">
             <img src={logo} alt="Unique Parfum" className="h-16 mb-4" style={{filter: "invert(1) sepia(1) saturate(5) hue-rotate(5deg) brightness(0.9)"}} />
             <p className="text-sm text-muted-foreground max-w-xs">
@@ -30,10 +30,7 @@ export function Footer() {
             <ul className="space-y-2.5">
               {NAV_LINKS.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
+                  <a href={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                     {link.label}
                   </a>
                 </li>
@@ -51,7 +48,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Social */}
+          {/* Réseaux sociaux */}
           <div>
             <h4 className="text-xs tracking-[0.3em] uppercase text-primary mb-4">Suivez-nous</h4>
             <div className="flex gap-3 mb-6">

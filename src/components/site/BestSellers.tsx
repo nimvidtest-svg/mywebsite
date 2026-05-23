@@ -51,7 +51,7 @@ export function BestSellers() {
             <span className="text-xs tracking-[0.3em] text-primary uppercase">Best Sellers</span>
           </div>
           <h2 className="font-display text-4xl md:text-5xl">
-            Our Most <span className="italic text-gradient-gold">Loved Scents</span>
+            Nos Parfums <span className="italic text-gradient-gold">les Plus Aimés</span>
           </h2>
         </motion.div>
 
@@ -69,7 +69,6 @@ export function BestSellers() {
                 whileHover={{ y: -6 }}
                 className="group relative glass gold-border rounded-3xl overflow-hidden flex flex-col"
               >
-                {/* Badges */}
                 <div className="absolute top-4 left-4 z-10 flex flex-col gap-1.5 items-start">
                   <div className="bg-gradient-gold text-primary-foreground text-[10px] tracking-widest px-3 py-1 rounded-full font-medium uppercase">
                     Best Seller
@@ -89,7 +88,6 @@ export function BestSellers() {
                   {p.price} DH
                 </div>
 
-                {/* Image */}
                 <Link to="/parfum/$id" params={{ id: p.id }} className="relative bg-black h-[220px] md:h-[260px] flex items-center justify-center overflow-hidden">
                   <img
                     src={p.image_url}
@@ -114,7 +112,7 @@ export function BestSellers() {
                       className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full border border-primary/40 text-primary text-sm font-medium hover:bg-primary/10 transition"
                     >
                       <Eye className="w-4 h-4" />
-                      View Product
+                      Voir le produit
                     </Link>
                     <button
                       type="button"

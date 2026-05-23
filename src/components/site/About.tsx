@@ -3,9 +3,9 @@ import { Sparkles, Award, Leaf, HeartHandshake } from "lucide-react";
 import offerImg from "@/assets/offer-3parfums.jpeg";
 
 const PILLARS = [
-  { icon: Award, label: "Premium Quality", desc: "Inspired by iconic global maisons" },
-  { icon: Leaf, label: "Long Lasting", desc: "Extrait de Parfum concentration" },
-  { icon: HeartHandshake, label: "Made for You", desc: "Accessible luxury for everyone" },
+  { icon: Award, label: "Qualité Premium", desc: "Inspiré des grandes maisons" },
+  { icon: Leaf, label: "Longue Tenue", desc: "Concentration Extrait de Parfum" },
+  { icon: HeartHandshake, label: "Pour Tous", desc: "Le luxe à votre portée" },
 ];
 
 export function About() {
@@ -25,7 +25,7 @@ export function About() {
             <div className="relative rounded-3xl overflow-hidden glass gold-border h-[380px] md:h-[480px]">
               <img
                 src={offerImg}
-                alt="Unique Parfum collection"
+                alt="Collection Unique Parfum"
                 className="w-full h-full object-cover object-center opacity-80"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -36,7 +36,6 @@ export function About() {
                 </div>
               </div>
             </div>
-            {/* Decorative glow */}
             <div className="absolute -bottom-6 -right-6 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
           </motion.div>
 
@@ -49,21 +48,22 @@ export function About() {
           >
             <div className="inline-flex items-center gap-2 glass-gold rounded-full px-4 py-1.5 mb-6">
               <Sparkles className="w-3.5 h-3.5 text-primary" />
-              <span className="text-xs tracking-[0.3em] text-primary uppercase">Our Story</span>
+              <span className="text-xs tracking-[0.3em] text-primary uppercase">Notre Histoire</span>
             </div>
 
             <h2 className="font-display text-4xl md:text-5xl leading-tight mb-6">
-              The Art of <span className="italic text-gradient-gold">Affordable</span> Luxury
+              L'Art du Luxe <span className="italic text-gradient-gold">Accessible</span>
             </h2>
 
             <p className="text-muted-foreground text-lg leading-relaxed mb-4">
-              Born in Salé, Morocco, Unique Parfum was created with a single mission: to bring the world's most iconic
-              fragrances within reach of everyone. Our expertly crafted inspirations capture the soul of luxury perfumery
-              — without the luxury price tag.
+              Née à Salé, au Maroc, Unique Parfum a été créée avec une seule mission : mettre les fragrances
+              emblématiques du monde entier à la portée de tous. Nos inspirations capturent l'âme de la parfumerie
+              de luxe — sans le prix du luxe.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-10">
-              Each bottle is an Extrait de Parfum — the highest concentration available — ensuring your scent lasts
-              from morning to night. We believe that smelling exceptional should be a daily pleasure, not a rare occasion.
+              Chaque flacon est un Extrait de Parfum — la concentration la plus élevée disponible — garantissant
+              que votre parfum dure du matin au soir. Nous croyons que sentir bon devrait être un plaisir quotidien,
+              pas une occasion rare.
             </p>
 
             <div className="grid grid-cols-3 gap-4 mb-8">
@@ -81,7 +81,7 @@ export function About() {
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-105 transition-transform"
             >
               <Sparkles className="w-4 h-4" />
-              Explore Our Collection
+              Explorer notre collection
             </a>
           </motion.div>
         </div>

@@ -46,8 +46,8 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.1 }}
             className="font-display text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-6"
           >
-            <span className="block text-foreground">Discover Your</span>
-            <span className="block shimmer-text italic font-light">Signature Scent</span>
+            <span className="block text-foreground">Découvrez Votre</span>
+            <span className="block shimmer-text italic font-light">Signature Olfactive</span>
           </motion.h1>
 
           <motion.p
@@ -56,7 +56,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.4 }}
             className="text-lg md:text-xl text-muted-foreground max-w-xl mb-3 font-light"
           >
-            Premium fragrances inspired by the world's greatest perfume houses.
+            Des fragrances premium inspirées des plus grandes maisons de parfum du monde.
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
@@ -64,7 +64,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.5 }}
             className="font-display text-3xl md:text-4xl text-gradient-gold mb-10"
           >
-            From 50 DH only.
+            À partir de 50 DH seulement.
           </motion.p>
 
           <motion.div
@@ -74,14 +74,14 @@ export function Hero() {
             className="flex flex-wrap gap-4"
           >
             <a href="#catalogue" className="px-8 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-105 transition-transform">
-              Shop Now
+              Découvrir
             </a>
             <button
               type="button"
               onClick={() => openWhatsapp("Bonjour Unique Parfum, je souhaite commander un parfum.")}
               className="px-8 py-4 rounded-full glass-gold text-primary font-medium tracking-wide hover:bg-primary/10 transition"
             >
-              Order on WhatsApp
+              Commander sur WhatsApp
             </button>
           </motion.div>
 
@@ -94,7 +94,7 @@ export function Hero() {
             {[
               { icon: Heart, label: "+100 clients", sub: "satisfaits" },
               { icon: Truck, label: "Livraison", sub: "rapide" },
-              { icon: Sparkles, label: "Longue", sub: "tenue" },
+              { icon: Sparkles, label: "Longue tenue", sub: "garantie" },
             ].map((s, i) => (
               <div key={i} className="glass rounded-2xl p-4 text-center">
                 <s.icon className="w-5 h-5 text-primary mx-auto mb-2" />

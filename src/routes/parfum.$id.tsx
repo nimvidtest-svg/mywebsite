@@ -43,7 +43,7 @@ function ProductPage() {
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition mb-10"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Catalogue
+          Retour au catalogue
         </Link>
 
         {isLoading ? (
@@ -140,12 +140,12 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
           />
         </div>
 
-        {/* Details */}
+        {/* Détails */}
         <div className="flex flex-col">
           <p className="text-[11px] tracking-[0.3em] text-primary uppercase mb-3">{perfume.brand}</p>
           <h1 className="font-display text-5xl md:text-6xl text-foreground mb-3 leading-tight">{perfume.name}</h1>
 
-          {/* Star rating */}
+          {/* Note */}
           <div className="flex items-center gap-2 mb-5">
             <div className="flex items-center gap-0.5">
               {[1, 2, 3, 4, 5].map((s) => (
@@ -175,7 +175,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
             </span>
           </div>
 
-          {/* Size selector */}
+          {/* Taille */}
           <div className="mb-5">
             <p className="text-xs tracking-widest uppercase text-primary mb-2">Taille</p>
             <div className="relative w-36">
@@ -190,14 +190,14 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
             </div>
           </div>
 
-          {/* Price */}
+          {/* Prix */}
           <div className="flex items-baseline gap-3 mb-6">
             <span className="font-display text-6xl text-gradient-gold">{perfume.price * qty}</span>
             <span className="text-2xl text-muted-foreground">DH</span>
             {qty > 1 && <span className="text-sm text-muted-foreground">({perfume.price} × {qty})</span>}
           </div>
 
-          {/* Quantity */}
+          {/* Quantité */}
           <div className="mb-6">
             <p className="text-xs tracking-widest uppercase text-primary mb-2">Quantité</p>
             <div className="flex items-center gap-3">
@@ -231,7 +231,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
             {out ? "Indisponible" : "Commander sur WhatsApp"}
           </button>
 
-          {/* Ingredients */}
+          {/* Composition */}
           <div className="mt-8 pt-8 border-t border-primary/15">
             <h3 className="text-sm font-medium tracking-widest uppercase text-primary mb-3">Composition</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -242,7 +242,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
         </div>
       </motion.div>
 
-      {/* Inline order form */}
+      {/* Formulaire de commande */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -253,9 +253,9 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
         <div className="text-center mb-8">
           <p className="text-xs tracking-[0.3em] text-primary uppercase mb-2">Commande Directe</p>
           <h2 className="font-display text-3xl md:text-4xl">
-            Order <span className="italic text-gradient-gold">{perfume.name}</span>
+            Commander <span className="italic text-gradient-gold">{perfume.name}</span>
           </h2>
-          <p className="text-muted-foreground mt-2 text-sm">Fill in your details and we'll confirm via WhatsApp.</p>
+          <p className="text-muted-foreground mt-2 text-sm">Remplissez vos coordonnées et nous confirmons via WhatsApp.</p>
         </div>
 
         {submitted ? (
@@ -263,39 +263,39 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
             <div className="w-16 h-16 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-4">
               <MessageCircle className="w-8 h-8 text-primary-foreground" />
             </div>
-            <h3 className="font-display text-2xl mb-2">Order Sent!</h3>
-            <p className="text-muted-foreground">WhatsApp is opening — our team will confirm shortly.</p>
+            <h3 className="font-display text-2xl mb-2">Commande envoyée !</h3>
+            <p className="text-muted-foreground">WhatsApp s'ouvre — notre équipe vous confirme sous peu.</p>
             <button
               type="button"
               onClick={() => setSubmitted(false)}
               className="mt-6 px-6 py-2.5 rounded-full glass border border-primary/30 text-sm text-primary hover:bg-primary/10 transition"
             >
-              Place another order
+              Passer une autre commande
             </button>
           </div>
         ) : (
           <form onSubmit={submitForm} className="grid md:grid-cols-2 gap-5">
             <OrderField
-              label="Full Name"
+              label="Nom complet"
               value={form.name}
               onChange={(v) => setForm((f) => ({ ...f, name: v }))}
               placeholder="Ahmed Benali"
             />
             <OrderField
-              label="Telephone"
+              label="Téléphone"
               type="tel"
               value={form.phone}
               onChange={(v) => setForm((f) => ({ ...f, phone: v }))}
               placeholder="+212 6XX XXX XXX"
             />
             <OrderField
-              label="City"
+              label="Ville"
               value={form.city}
               onChange={(v) => setForm((f) => ({ ...f, city: v }))}
               placeholder="Casablanca"
             />
             <OrderField
-              label="Address"
+              label="Adresse"
               value={form.address}
               onChange={(v) => setForm((f) => ({ ...f, address: v }))}
               placeholder="123 Rue Hassan II"
@@ -307,7 +307,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
                 className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.01] transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 <MessageCircle className="w-5 h-5" />
-                Confirm Order · {perfume.price * qty} DH
+                Confirmer la commande · {perfume.price * qty} DH
               </button>
             </div>
           </form>
@@ -341,7 +341,7 @@ function RelatedProducts({ perfumes }: { perfumes: Perfume[] }) {
   return (
     <section className="mb-12">
       <h2 className="font-display text-3xl md:text-4xl mb-8">
-        You May Also Like
+        Vous aimerez aussi
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
         {perfumes.map((p) => (
