@@ -1,28 +1,16 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+const ADMIN_PASSWORD = "Unique@Parfum1";
+const SESSION_KEY = "admin_session";
 
-export const ADMIN_EMAIL = "admin@admin.com";
+export function login(password: string): boolean {
+  if (password !== ADMIN_PASSWORD) return false;
+  localStorage.setItem(SESSION_KEY, "1");
+  return true;
+}
 
-export function useAuth() {
-  const [loading, setLoading] = useState(true);
-  const [email, setEmail] = useState<string | null>(null);
+export function logout() {
+  localStorage.removeItem(SESSION_KEY);
+}
 
-  useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      setEmail(session?.user?.email ?? null);
-    });
-    supabase.auth.getSession().then(({ data }) => {
-      setEmail(data.session?.user?.email ?? null);
-      setLoading(false);
-    });
-    return () => sub.subscription.unsubscribe();
-  }, []);
-
-  return {
-    loading,
-    email,
-    isAuthenticated: !!email,
-    isAdmin: !!email && email.toLowerCase() === ADMIN_EMAIL,
-    signOut: () => supabase.auth.signOut(),
-  };
+export function isLoggedIn(): boolean {
+  return localStorage.getItem(SESSION_KEY) === "1";
 }

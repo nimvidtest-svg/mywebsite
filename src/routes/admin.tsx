@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, Link, useNavigate, useLocation } from "@tanstack/react-router";
-import { useAuth, ADMIN_EMAIL } from "@/lib/auth";
-import { Loader2, LogOut, Package, ShoppingBag, Settings as SettingsIcon, LayoutDashboard } from "lucide-react";
-import { useEffect } from "react";
+import { isLoggedIn, logout } from "@/lib/auth";
+import { LogOut, Package, ShoppingBag, Settings as SettingsIcon, LayoutDashboard } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
@@ -9,30 +9,21 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminLayout() {
-  const { loading, isAuthenticated, isAdmin, email, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) navigate({ to: "/login" });
-  }, [loading, isAuthenticated, navigate]);
+    if (!isLoggedIn()) {
+      navigate({ to: "/login" });
+    } else {
+      setReady(true);
+    }
+  }, [navigate]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background"><Loader2 className="w-6 h-6 text-primary animate-spin" /></div>;
-  if (!isAuthenticated) return null;
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-6">
-        <div className="max-w-md text-center glass gold-border rounded-3xl p-8">
-          <h1 className="font-display text-3xl mb-3">Accès refusé</h1>
-          <p className="text-sm text-muted-foreground mb-2">Cet espace est réservé à l'administrateur.</p>
-          <p className="text-xs text-muted-foreground mb-6">Connecté en tant que : <span className="text-primary">{email}</span></p>
-          <p className="text-xs text-muted-foreground mb-6">Seul <span className="text-primary">{ADMIN_EMAIL}</span> peut accéder à cet espace.</p>
-          <button onClick={async () => { await signOut(); navigate({ to: "/login" }); }}
-            className="px-6 py-2 rounded-full bg-gradient-gold text-primary-foreground text-sm font-medium">Déconnexion</button>
-        </div>
-      </div>
-    );
-  }
+  if (!ready) return null;
+
+  const signOut = () => { logout(); navigate({ to: "/login" }); };
 
   const links = [
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -55,7 +46,7 @@ function AdminLayout() {
                 </Link>
               );
             })}
-            <button onClick={async () => { await signOut(); navigate({ to: "/login" }); }}
+            <button onClick={signOut}
               className="flex items-center gap-2 px-3 py-2 text-xs tracking-wider uppercase text-foreground/60 hover:text-destructive transition">
               <LogOut className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Sortir</span>
             </button>
