@@ -2,13 +2,21 @@ import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Perfume } from "@/lib/api";
+import { createOrder } from "@/lib/api";
 import { openWhatsapp } from "@/lib/whatsapp";
 
 export function PerfumeCard({ perfume }: { perfume: Perfume }) {
   const out = perfume.stock_status === "out_of_stock";
   const low = perfume.stock_status === "low_stock";
-  const order = () =>
+  const order = () => {
+    createOrder({
+      customer_name: "Client WhatsApp",
+      phone: "", city: null, address: null,
+      items: [{ name: perfume.name, qty: 1 }],
+      total: perfume.price, type: "whatsapp", notes: null,
+    }).catch(() => {});
     openWhatsapp(`Bonjour Unique Parfum, je souhaite commander : ${perfume.name} (${perfume.brand}) - ${perfume.price} DH`);
+  };
 
   return (
     <motion.div

@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { ArrowLeft, MessageCircle, Tag, User, Sparkles } from "lucide-react";
-import { fetchPerfumes, type Perfume } from "@/lib/api";
+import { fetchPerfumes, createOrder, type Perfume } from "@/lib/api";
 import { openWhatsapp } from "@/lib/whatsapp";
 import { Navbar } from "@/components/site/Navbar";
 import { AnnouncementBar } from "@/components/site/AnnouncementBar";
@@ -61,10 +61,15 @@ function ProductPage() {
 }
 
 function ProductDetail({ perfume }: { perfume: Perfume }) {
-  const order = () =>
-    openWhatsapp(
-      `Bonjour Unique Parfum, je souhaite commander : ${perfume.name} (${perfume.brand}) - ${perfume.price} DH`
-    );
+  const order = () => {
+    createOrder({
+      customer_name: "Client WhatsApp",
+      phone: "", city: null, address: null,
+      items: [{ name: perfume.name, qty: 1 }],
+      total: perfume.price, type: "whatsapp", notes: null,
+    }).catch(() => {});
+    openWhatsapp(`Bonjour Unique Parfum, je souhaite commander : ${perfume.name} (${perfume.brand}) - ${perfume.price} DH`);
+  };
   const out = perfume.stock_status === "out_of_stock";
   const low = perfume.stock_status === "low_stock";
 
