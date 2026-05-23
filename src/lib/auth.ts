@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-export const ADMIN_EMAIL = "mohamed2026@gmail.com";
+export const ADMIN_EMAIL = "admin@admin.com";
 
 export function useAuth() {
   const [loading, setLoading] = useState(true);
