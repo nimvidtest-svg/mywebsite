@@ -1,6 +1,5 @@
 import { Instagram, MessageCircle, Music2, Mail, MapPin } from "lucide-react";
 import logo from "@/assets/logo.png";
-import { openWhatsapp } from "@/lib/whatsapp";
 
 const NAV_LINKS = [
   { label: "Accueil", href: "#top" },
@@ -53,31 +52,23 @@ export function Footer() {
             <h4 className="text-xs tracking-[0.3em] uppercase text-primary mb-4">Suivez-nous</h4>
             <div className="flex gap-3 mb-6">
               {[
-                { Icon: MessageCircle, onClick: () => openWhatsapp("Bonjour Unique Parfum"), href: undefined as string | undefined },
-                { Icon: Instagram, href: "https://instagram.com", onClick: undefined },
-                { Icon: Music2, href: "https://tiktok.com", onClick: undefined },
-              ].map(({ Icon, href, onClick }, i) =>
-                onClick ? (
-                  <button key={i} type="button" onClick={onClick}
-                    className="w-11 h-11 rounded-full glass-gold flex items-center justify-center text-primary hover:bg-gradient-gold hover:text-primary-foreground transition">
-                    <Icon className="w-5 h-5"/>
-                  </button>
-                ) : (
-                  <a key={i} href={href} target="_blank" rel="noopener noreferrer"
-                     className="w-11 h-11 rounded-full glass-gold flex items-center justify-center text-primary hover:bg-gradient-gold hover:text-primary-foreground transition">
-                    <Icon className="w-5 h-5"/>
-                  </a>
-                )
-              )}
+                { Icon: MessageCircle, href: "https://wa.me/212701778254" },
+                { Icon: Instagram, href: "https://instagram.com" },
+                { Icon: Music2, href: "https://tiktok.com" },
+              ].map(({ Icon, href }, i) => (
+                <a key={i} href={href} target="_blank" rel="noopener noreferrer"
+                   className="w-11 h-11 rounded-full glass-gold flex items-center justify-center text-primary hover:bg-gradient-gold hover:text-primary-foreground transition">
+                  <Icon className="w-5 h-5"/>
+                </a>
+              ))}
             </div>
-            <button
-              type="button"
-              onClick={() => openWhatsapp("Bonjour Unique Parfum, je souhaite passer une commande.")}
+            <a
+              href="#commander"
               className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-gold text-primary-foreground text-sm font-medium shadow-gold hover:scale-105 transition-transform"
             >
               <MessageCircle className="w-4 h-4" />
               Commander
-            </button>
+            </a>
           </div>
         </div>
 

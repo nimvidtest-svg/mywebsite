@@ -2,9 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { ArrowLeft, MessageCircle, Tag, User, Sparkles, Star, Minus, Plus, ChevronDown, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, MessageCircle, Tag, User, Sparkles, Star, Minus, Plus, CheckCircle2 } from "lucide-react";
 import { fetchPerfumes, createOrder, type Perfume } from "@/lib/api";
-import { openWhatsapp } from "@/lib/whatsapp";
 import { Navbar } from "@/components/site/Navbar";
 import { AnnouncementBar } from "@/components/site/AnnouncementBar";
 import { Footer } from "@/components/site/Footer";
@@ -81,16 +80,6 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
 
   const handleQty = (delta: number) => setQty((q) => Math.max(1, Math.min(99, q + delta)));
 
-  const orderWhatsapp = () => {
-    createOrder({
-      customer_name: "Client WhatsApp",
-      phone: "", city: null, address: null,
-      items: [{ name: perfume.name, qty }],
-      total: totalPrice, type: "whatsapp", notes: `Taille: ${size.label}`,
-    }).catch(() => {});
-    openWhatsapp(`Bonjour Unique Parfum, je souhaite commander :\n\n🧴 ${perfume.name} (${perfume.brand})\n📦 Taille: ${size.label}\n🔢 Quantité: ${qty}\n💰 Total: ${totalPrice} DH`);
-  };
-
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.city || !form.address) return;
@@ -104,8 +93,6 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
       type: "standard",
       notes: `Taille: ${size.label}`,
     }).catch(() => {});
-    const msg = `Bonjour Unique Parfum,\n\nNouvelle commande :\n\n👤 ${form.name}\n📞 ${form.phone}\n🏙️ ${form.city}\n🏠 ${form.address}\n🧴 ${perfume.name} (${perfume.brand})\n📦 ${size.label} × ${qty}\n💰 ${totalPrice} DH`;
-    openWhatsapp(msg);
     setSubmitted(true);
   };
 

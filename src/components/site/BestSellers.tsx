@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Crown, Star, Eye, MessageCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { fetchPerfumes, createOrder } from "@/lib/api";
-import { openWhatsapp } from "@/lib/whatsapp";
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -31,12 +30,11 @@ export function BestSellers() {
 
   const order = (p: (typeof perfumes)[0]) => {
     createOrder({
-      customer_name: "Client WhatsApp",
+      customer_name: "Client",
       phone: "", city: null, address: null,
       items: [{ name: p.name, qty: 1 }],
-      total: p.price, type: "whatsapp", notes: null,
+      total: p.price, type: "standard", notes: null,
     }).catch(() => {});
-    openWhatsapp(`Bonjour Unique Parfum, je souhaite commander : ${p.name} (${p.brand}) - ${p.price} DH`);
   };
 
   return (

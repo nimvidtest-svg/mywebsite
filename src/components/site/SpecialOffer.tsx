@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Truck, Gift, Sparkles, Check, X } from "lucide-react";
 import offerImg from "@/assets/offer-3parfums.jpeg";
 import { fetchPerfumes, fetchSetting, createOrder, type OfferSettings } from "@/lib/api";
-import { openWhatsapp } from "@/lib/whatsapp";
 
 export function SpecialOffer() {
   const [open, setOpen] = useState(false);
@@ -51,23 +50,6 @@ export function SpecialOffer() {
         total: o.price, type: "offer_3", notes: "Offre 199 DH · testeur inclus",
       });
     } catch (err) { console.error(err); }
-    const msg = `Bonjour Unique Parfum,
-
-Je souhaite commander l'offre 3 parfums à ${o.price} DH :
-
-Parfum 1 : ${p1}
-Parfum 2 : ${p2}
-Parfum 3 : ${p3}
-
-Nom : ${nom}
-Prénom : ${prenom}
-Ville : ${ville}
-Adresse : ${adresse}
-Téléphone : ${tel}
-
-Livraison gratuite partout au Maroc.
-Avec testeur inclus.`;
-    openWhatsapp(msg);
     setOpen(false);
   };
 

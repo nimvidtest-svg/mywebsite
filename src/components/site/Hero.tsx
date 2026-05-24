@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import heroBg from "@/assets/Image_bg.png";
 import bottle from "@/assets/hero-bottle.png";
 import { Sparkles, Truck, Heart } from "lucide-react";
-import { openWhatsapp } from "@/lib/whatsapp";
 
 export function Hero() {
   const mx = useMotionValue(0);
@@ -76,13 +75,12 @@ export function Hero() {
             <a href="#catalogue" className="px-8 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-105 transition-transform">
               Découvrir
             </a>
-            <button
-              type="button"
-              onClick={() => openWhatsapp("Bonjour Unique Parfum, je souhaite commander un parfum.")}
+            <a
+              href="#commander"
               className="px-8 py-4 rounded-full glass-gold text-primary font-medium tracking-wide hover:bg-primary/10 transition"
             >
-              Commander sur WhatsApp
-            </button>
+              Commander
+            </a>
           </motion.div>
 
           <motion.div
