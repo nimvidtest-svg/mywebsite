@@ -233,8 +233,46 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
             </div>
           </div>
 
+          {/* Formulaire de commande intégré */}
+          <div className="pt-6 border-t border-primary/15">
+            <p className="text-xs tracking-[0.3em] text-primary uppercase mb-4">Commande Directe</p>
+            {submitted ? (
+              <div className="text-center py-6">
+                <div className="w-14 h-14 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-3">
+                  <MessageCircle className="w-7 h-7 text-primary-foreground" />
+                </div>
+                <h3 className="font-display text-xl mb-1">Commande envoyée !</h3>
+                <p className="text-muted-foreground text-sm">WhatsApp s'ouvre — notre équipe vous confirme sous peu.</p>
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(false)}
+                  className="mt-4 px-5 py-2 rounded-full glass border border-primary/30 text-sm text-primary hover:bg-primary/10 transition"
+                >
+                  Passer une autre commande
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={submitForm} className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <OrderField label="Nom complet" value={form.name} onChange={(v) => setForm((f) => ({ ...f, name: v }))} placeholder="Ahmed Benali" />
+                  <OrderField label="Téléphone" type="tel" value={form.phone} onChange={(v) => setForm((f) => ({ ...f, phone: v }))} placeholder="+212 6XX XXX XXX" />
+                  <OrderField label="Ville" value={form.city} onChange={(v) => setForm((f) => ({ ...f, city: v }))} placeholder="Casablanca" />
+                  <OrderField label="Adresse" value={form.address} onChange={(v) => setForm((f) => ({ ...f, address: v }))} placeholder="123 Rue Hassan II" />
+                </div>
+                <button
+                  type="submit"
+                  disabled={out || !form.name || !form.phone || !form.city || !form.address}
+                  className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.01] transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Confirmer la commande · {totalPrice} DH
+                </button>
+              </form>
+            )}
+          </div>
+
           {/* Composition */}
-          <div className="mt-8 pt-8 border-t border-primary/15">
+          <div className="mt-6 pt-6 border-t border-primary/15">
             <h3 className="text-sm font-medium tracking-widest uppercase text-primary mb-3">Composition</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Alcool denat., Parfum (Fragrance), Aqua (Water), Benzyl Benzoate, Linalool, Citronellol, Geraniol,
@@ -242,78 +280,6 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
             </p>
           </div>
         </div>
-      </motion.div>
-
-      {/* Formulaire de commande */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="glass gold-border rounded-3xl p-8 md:p-10 mb-20"
-      >
-        <div className="text-center mb-8">
-          <p className="text-xs tracking-[0.3em] text-primary uppercase mb-2">Commande Directe</p>
-          <h2 className="font-display text-3xl md:text-4xl">
-            Commander <span className="italic text-gradient-gold">{perfume.name}</span>
-          </h2>
-          <p className="text-muted-foreground mt-2 text-sm">Remplissez vos coordonnées et nous confirmons via WhatsApp.</p>
-        </div>
-
-        {submitted ? (
-          <div className="text-center py-8">
-            <div className="w-16 h-16 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-4">
-              <MessageCircle className="w-8 h-8 text-primary-foreground" />
-            </div>
-            <h3 className="font-display text-2xl mb-2">Commande envoyée !</h3>
-            <p className="text-muted-foreground">WhatsApp s'ouvre — notre équipe vous confirme sous peu.</p>
-            <button
-              type="button"
-              onClick={() => setSubmitted(false)}
-              className="mt-6 px-6 py-2.5 rounded-full glass border border-primary/30 text-sm text-primary hover:bg-primary/10 transition"
-            >
-              Passer une autre commande
-            </button>
-          </div>
-        ) : (
-          <form onSubmit={submitForm} className="grid md:grid-cols-2 gap-5">
-            <OrderField
-              label="Nom complet"
-              value={form.name}
-              onChange={(v) => setForm((f) => ({ ...f, name: v }))}
-              placeholder="Ahmed Benali"
-            />
-            <OrderField
-              label="Téléphone"
-              type="tel"
-              value={form.phone}
-              onChange={(v) => setForm((f) => ({ ...f, phone: v }))}
-              placeholder="+212 6XX XXX XXX"
-            />
-            <OrderField
-              label="Ville"
-              value={form.city}
-              onChange={(v) => setForm((f) => ({ ...f, city: v }))}
-              placeholder="Casablanca"
-            />
-            <OrderField
-              label="Adresse"
-              value={form.address}
-              onChange={(v) => setForm((f) => ({ ...f, address: v }))}
-              placeholder="123 Rue Hassan II"
-            />
-            <div className="md:col-span-2">
-              <button
-                type="submit"
-                disabled={out || !form.name || !form.phone || !form.city || !form.address}
-                className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.01] transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                <MessageCircle className="w-5 h-5" />
-                Confirmer la commande · {totalPrice} DH
-              </button>
-            </div>
-          </form>
-        )}
       </motion.div>
     </>
   );
