@@ -233,16 +233,6 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={orderWhatsapp}
-            disabled={out}
-            className="flex items-center justify-center gap-3 w-full py-5 rounded-full bg-gradient-gold text-primary-foreground font-medium text-lg shadow-gold hover:scale-[1.02] transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
-          >
-            <MessageCircle className="w-5 h-5" />
-            {out ? "Indisponible" : "Commander sur WhatsApp"}
-          </button>
-
           {/* Composition */}
           <div className="mt-8 pt-8 border-t border-primary/15">
             <h3 className="text-sm font-medium tracking-widest uppercase text-primary mb-3">Composition</h3>

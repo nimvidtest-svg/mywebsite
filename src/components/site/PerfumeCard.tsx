@@ -1,22 +1,10 @@
 import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Perfume } from "@/lib/api";
-import { createOrder } from "@/lib/api";
-import { openWhatsapp } from "@/lib/whatsapp";
 
 export function PerfumeCard({ perfume }: { perfume: Perfume }) {
   const out = perfume.stock_status === "out_of_stock";
   const low = perfume.stock_status === "low_stock";
-  const order = () => {
-    createOrder({
-      customer_name: "Client WhatsApp",
-      phone: "", city: null, address: null,
-      items: [{ name: perfume.name, qty: 1 }],
-      total: perfume.price, type: "whatsapp", notes: null,
-    }).catch(() => {});
-    openWhatsapp(`Bonjour Unique Parfum, je souhaite commander : ${perfume.name} (${perfume.brand}) - ${perfume.price} DH`);
-  };
 
   return (
     <motion.div
@@ -63,16 +51,7 @@ export function PerfumeCard({ perfume }: { perfume: Perfume }) {
         <Link to="/parfum/$id" params={{ id: perfume.id }}>
           <h3 className="font-display text-2xl text-foreground mb-2 hover:text-primary transition-colors">{perfume.name}</h3>
         </Link>
-        <p className="text-sm text-muted-foreground mb-5 flex-1 line-clamp-2">{perfume.description}</p>
-        <button
-          type="button"
-          onClick={order}
-          disabled={out}
-          className="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-foreground/5 hover:bg-gradient-gold hover:text-primary-foreground border border-primary/30 text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-foreground/5 disabled:hover:text-foreground"
-        >
-          <MessageCircle className="w-4 h-4" />
-          {out ? "Indisponible" : "Commander"}
-        </button>
+        <p className="text-sm text-muted-foreground flex-1 line-clamp-2">{perfume.description}</p>
       </div>
     </motion.div>
   );
