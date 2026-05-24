@@ -61,7 +61,10 @@ function ProductPage() {
   );
 }
 
-const SIZES = ["50ml", "70ml"];
+const SIZES = [
+  { label: "50ml", price: 50 },
+  { label: "70ml", price: 70 },
+];
 const STAR_RATING = 4.7;
 
 function ProductDetail({ perfume }: { perfume: Perfume }) {
@@ -73,6 +76,9 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
   const out = perfume.stock_status === "out_of_stock";
   const low = perfume.stock_status === "low_stock";
 
+  const unitPrice = size.price;
+  const totalPrice = unitPrice * qty;
+
   const handleQty = (delta: number) => setQty((q) => Math.max(1, Math.min(99, q + delta)));
 
   const orderWhatsapp = () => {
@@ -80,9 +86,9 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
       customer_name: "Client WhatsApp",
       phone: "", city: null, address: null,
       items: [{ name: perfume.name, qty }],
-      total: perfume.price * qty, type: "whatsapp", notes: `Taille: ${size}`,
+      total: totalPrice, type: "whatsapp", notes: `Taille: ${size.label}`,
     }).catch(() => {});
-    openWhatsapp(`Bonjour Unique Parfum, je souhaite commander :\n\n🧴 ${perfume.name} (${perfume.brand})\n📦 Taille: ${size}\n🔢 Quantité: ${qty}\n💰 Total: ${perfume.price * qty} DH`);
+    openWhatsapp(`Bonjour Unique Parfum, je souhaite commander :\n\n🧴 ${perfume.name} (${perfume.brand})\n📦 Taille: ${size.label}\n🔢 Quantité: ${qty}\n💰 Total: ${totalPrice} DH`);
   };
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -94,11 +100,11 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
       city: form.city,
       address: form.address,
       items: [{ name: perfume.name, qty }],
-      total: perfume.price * qty,
+      total: totalPrice,
       type: "standard",
-      notes: `Taille: ${size}`,
+      notes: `Taille: ${size.label}`,
     }).catch(() => {});
-    const msg = `Bonjour Unique Parfum,\n\nNouvelle commande :\n\n👤 ${form.name}\n📞 ${form.phone}\n🏙️ ${form.city}\n🏠 ${form.address}\n🧴 ${perfume.name} (${perfume.brand})\n📦 ${size} × ${qty}\n💰 ${perfume.price * qty} DH`;
+    const msg = `Bonjour Unique Parfum,\n\nNouvelle commande :\n\n👤 ${form.name}\n📞 ${form.phone}\n🏙️ ${form.city}\n🏠 ${form.address}\n🧴 ${perfume.name} (${perfume.brand})\n📦 ${size.label} × ${qty}\n💰 ${totalPrice} DH`;
     openWhatsapp(msg);
     setSubmitted(true);
   };
@@ -178,23 +184,29 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
           {/* Taille */}
           <div className="mb-5">
             <p className="text-xs tracking-widest uppercase text-primary mb-2">Taille</p>
-            <div className="relative w-36">
-              <select
-                value={size}
-                onChange={(e) => setSize(e.target.value)}
-                className="w-full bg-secondary/40 border border-primary/30 rounded-xl px-4 py-2.5 text-sm text-foreground appearance-none outline-none focus:border-primary/60 cursor-pointer"
-              >
-                {SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary/60 pointer-events-none" />
+            <div className="flex gap-3">
+              {SIZES.map((s) => (
+                <button
+                  key={s.label}
+                  type="button"
+                  onClick={() => setSize(s)}
+                  className={`px-5 py-2.5 rounded-xl border text-sm font-medium transition ${
+                    size.label === s.label
+                      ? "bg-gradient-gold text-primary-foreground border-transparent shadow-gold"
+                      : "glass border-primary/30 text-foreground/70 hover:border-primary/60"
+                  }`}
+                >
+                  {s.label} — {s.price} DH
+                </button>
+              ))}
             </div>
           </div>
 
           {/* Prix */}
           <div className="flex items-baseline gap-3 mb-6">
-            <span className="font-display text-6xl text-gradient-gold">{perfume.price * qty}</span>
+            <span className="font-display text-6xl text-gradient-gold">{totalPrice}</span>
             <span className="text-2xl text-muted-foreground">DH</span>
-            {qty > 1 && <span className="text-sm text-muted-foreground">({perfume.price} × {qty})</span>}
+            {qty > 1 && <span className="text-sm text-muted-foreground">({unitPrice} × {qty})</span>}
           </div>
 
           {/* Quantité */}
@@ -307,7 +319,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
                 className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.01] transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 <MessageCircle className="w-5 h-5" />
-                Confirmer la commande · {perfume.price * qty} DH
+                Confirmer la commande · {totalPrice} DH
               </button>
             </div>
           </form>
