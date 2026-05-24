@@ -2,12 +2,11 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Loader2 } from "lucide-react";
-import { fetchPerfumes, categories, scents, type Category, type Scent } from "@/lib/api";
+import { fetchPerfumes, categories, type Category } from "@/lib/api";
 import { PerfumeCard } from "./PerfumeCard";
 
 export function Catalogue() {
   const [active, setActive] = useState<Category>("BEST SELLERS");
-  const [scent, setScent] = useState<Scent | "all">("all");
   const [query, setQuery] = useState("");
 
   const { data: perfumes = [], isLoading } = useQuery({
@@ -18,12 +17,11 @@ export function Catalogue() {
   const list = useMemo(() => {
     return perfumes.filter((p) => {
       const matchCat = active === "BEST SELLERS" ? p.best_seller : p.category === active;
-      const matchScent = scent === "all" || p.scent === scent;
       const q = query.trim().toLowerCase();
       const matchQ = !q || p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q);
-      return matchCat && matchScent && matchQ;
+      return matchCat && matchQ;
     });
-  }, [active, scent, query, perfumes]);
+  }, [active, query, perfumes]);
 
   return (
     <section id="catalogue" className="relative py-24 md:py-32">
@@ -72,18 +70,6 @@ export function Catalogue() {
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2 justify-center mb-12">
-          <button onClick={() => setScent("all")}
-            className={`px-4 py-1.5 rounded-full text-[10px] tracking-[0.2em] uppercase transition ${scent === "all" ? "bg-primary/20 text-primary border border-primary/40" : "glass text-foreground/60 hover:text-primary"}`}>
-            Toutes senteurs
-          </button>
-          {scents.map((s) => (
-            <button key={s.value} onClick={() => setScent(s.value)}
-              className={`px-4 py-1.5 rounded-full text-[10px] tracking-[0.2em] uppercase transition ${scent === s.value ? "bg-primary/20 text-primary border border-primary/40" : "glass text-foreground/60 hover:text-primary"}`}>
-              {s.label}
-            </button>
-          ))}
-        </div>
 
         {isLoading ? (
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 text-primary animate-spin" /></div>
