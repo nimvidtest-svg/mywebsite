@@ -4,8 +4,7 @@ import logo from "@/assets/logo.png";
 
 const links = [
   { href: "#catalogue", label: "Catalogue" },
-  { href: "#galerie", label: "Galerie" },
-  { href: "#avis", label: "Avis" },
+  { href: "#about", label: "À Propos" },
   { href: "#commander", label: "Commander" },
 ];
 
