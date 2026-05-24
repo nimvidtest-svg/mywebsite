@@ -239,6 +239,13 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
                 >
                   Voir le catalogue
                 </Link>
+                <button
+                  type="button"
+                  onClick={() => { setSubmitted(false); setForm({ name: "", address: "", phone: "", city: "" }); }}
+                  className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full glass border border-primary/30 text-primary font-medium text-sm hover:bg-primary/10 transition"
+                >
+                  Commander à nouveau ce produit
+                </button>
               </div>
             ) : (
               <form onSubmit={submitForm} className="space-y-3">
