@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect } from "react";
-import heroBg from "@/assets/hero-bg.jpg";
+import heroBg from "@/assets/Image_bg.png";
 import bottle from "@/assets/hero-bottle.png";
 import { Sparkles, Truck, Heart } from "lucide-react";
 import { openWhatsapp } from "@/lib/whatsapp";
@@ -23,7 +23,7 @@ export function Hero() {
   return (
     <section id="top" className="relative min-h-screen flex items-center overflow-hidden pt-24">
       <div className="absolute inset-0 z-0">
-        <img src={heroBg} alt="" className="w-full h-full object-cover opacity-40" />
+        <img src={heroBg} alt="" className="w-full h-full object-cover opacity-70" />
         <div className="absolute inset-0 bg-noir" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background" />
       </div>
