@@ -8,7 +8,7 @@ export const Route = createFileRoute("/admin/orders")({ component: AdminOrders }
 
 const STATUS_CONFIG: Record<OrderStatus, { border: string; bg: string; text: string; check: string }> = {
   nouveau:  { border: "border-primary/60",     bg: "bg-primary/10",      text: "text-primary",      check: "accent-amber-400" },
-  confirme: { border: "border-amber-500/70",   bg: "bg-amber-500/10",    text: "text-amber-400",    check: "accent-amber-400" },
+  confirme: { border: "border-blue-500/70",    bg: "bg-blue-500/10",     text: "text-blue-400",     check: "accent-blue-400" },
   livre:    { border: "border-emerald-500/70", bg: "bg-emerald-500/10",  text: "text-emerald-400",  check: "accent-emerald-400" },
   annule:   { border: "border-destructive/70", bg: "bg-destructive/10",  text: "text-destructive",  check: "accent-red-400" },
 };
