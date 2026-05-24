@@ -19,10 +19,8 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-const RATINGS: Record<number, number> = {};
-function getRating(idx: number) {
-  if (!RATINGS[idx]) RATINGS[idx] = 4 + Math.floor((idx * 137 + 7) % 10) / 10;
-  return RATINGS[idx];
+function getRating(_idx: number) {
+  return 5;
 }
 
 export function BestSellers() {

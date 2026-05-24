@@ -65,7 +65,7 @@ const SIZES = [
   { label: "50ml", price: 50 },
   { label: "70ml", price: 70 },
 ];
-const STAR_RATING = 4.7;
+const STAR_RATING = 5;
 
 function ProductDetail({ perfume }: { perfume: Perfume }) {
   const [qty, setQty] = useState(1);
@@ -158,7 +158,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
                 <Star key={s} className={`w-4 h-4 ${s <= Math.floor(STAR_RATING) ? "text-primary fill-primary" : "text-muted-foreground/30"}`} />
               ))}
             </div>
-            <span className="text-sm text-muted-foreground">{STAR_RATING} · 24 avis</span>
+            <span className="text-sm text-muted-foreground">5.0 · 24 avis</span>
           </div>
 
           <p className="text-muted-foreground text-lg leading-relaxed mb-6">{perfume.description}</p>
