@@ -75,6 +75,10 @@
 @layer base {
   * { border-color: var(--color-border); }
   html { scroll-behavior: smooth; }
+  select option {
+    background-color: #ffffff;
+    color: #000000;
+  }
   body {
     background: var(--color-background);
     color: var(--color-foreground);
