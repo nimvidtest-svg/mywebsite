@@ -1,9 +1,9 @@
 import { createFileRoute, Outlet, Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { isLoggedIn, logout } from "@/lib/auth";
-import { LogOut, Package, ShoppingBag, Settings as SettingsIcon, LayoutDashboard } from "lucide-react";
-import { useEffect, useState } from "react";
+import { LogOut, Package, ShoppingBag, Settings as SettingsIcon, LayoutDashboard, Bell } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { playNewOrder } from "@/lib/sounds";
+import { playNewOrder, unlockAudio } from "@/lib/sounds";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
@@ -15,47 +15,52 @@ function AdminLayout() {
   const location = useLocation();
   const [ready, setReady] = useState(false);
   const [newCount, setNewCount] = useState(0);
+  const [soundOn, setSoundOn] = useState(true);
+  const prevCount = useRef(0);
 
-  // Fetch new-order count on mount
-  useEffect(() => {
-    supabase
+  // Fetch count helper
+  const fetchCount = async () => {
+    const { count } = await supabase
       .from("orders")
       .select("*", { count: "exact", head: true })
-      .eq("status", "nouveau")
-      .then(({ count }) => setNewCount(count ?? 0));
-  }, []);
+      .eq("status", "nouveau");
+    const n = count ?? 0;
+    if (n > prevCount.current && prevCount.current !== -1) {
+      if (soundOn) playNewOrder();
+    }
+    prevCount.current = n;
+    setNewCount(n);
+  };
 
-  // Real-time: increment badge when a new order arrives
+  // Initial fetch + polling every 20 s (fallback if realtime not enabled)
+  useEffect(() => {
+    prevCount.current = -1; // skip sound on first load
+    fetchCount().then(() => { prevCount.current = newCount; });
+    const timer = setInterval(fetchCount, 20_000);
+    return () => clearInterval(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [soundOn]);
+
+  // Supabase Realtime subscription
   useEffect(() => {
     const channel = supabase
-      .channel("admin-new-orders")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "orders" },
-        () => { setNewCount((n) => n + 1); playNewOrder(); },
-      )
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "orders" },
-        async () => {
-          // Re-fetch count when any order status changes
-          const { count } = await supabase
-            .from("orders")
-            .select("*", { count: "exact", head: true })
-            .eq("status", "nouveau");
-          setNewCount(count ?? 0);
-        },
-      )
+      .channel("admin-orders-rt")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "orders" }, () => {
+        setNewCount((n) => {
+          if (soundOn) playNewOrder();
+          return n + 1;
+        });
+      })
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "orders" }, fetchCount)
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [soundOn]);
 
+  // Auth guard
   useEffect(() => {
-    if (!isLoggedIn()) {
-      navigate({ to: "/login" });
-    } else {
-      setReady(true);
-    }
+    if (!isLoggedIn()) navigate({ to: "/login" });
+    else setReady(true);
   }, [navigate]);
 
   if (!ready) return null;
@@ -63,14 +68,15 @@ function AdminLayout() {
   const signOut = () => { logout(); navigate({ to: "/login" }); };
 
   const links = [
-    { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-    { to: "/admin/perfumes", label: "Parfums", icon: Package },
-    { to: "/admin/orders", label: "Commandes", icon: ShoppingBag, badge: newCount },
-    { to: "/admin/settings", label: "Paramètres", icon: SettingsIcon },
+    { to: "/admin",          label: "Dashboard",   icon: LayoutDashboard, exact: true },
+    { to: "/admin/perfumes", label: "Parfums",      icon: Package },
+    { to: "/admin/orders",   label: "Commandes",    icon: ShoppingBag, badge: newCount },
+    { to: "/admin/settings", label: "Paramètres",   icon: SettingsIcon },
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    // Unlock AudioContext on first click anywhere in the admin layout
+    <div className="min-h-screen bg-background text-foreground" onClick={unlockAudio}>
       <header className="border-b border-primary/15 bg-noir/60 backdrop-blur sticky top-0 z-40">
         <div className="container mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-4">
           <Link to="/admin" className="font-display text-xl text-gradient-gold">Unique Admin</Link>
@@ -85,13 +91,22 @@ function AdminLayout() {
                   {l.badge != null && l.badge > 0 && (
                     <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold leading-none shadow-lg">
                       {l.badge > 99 ? "99+" : l.badge}
-                      {/* Pulsing ring */}
                       <span className="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-75" />
                     </span>
                   )}
                 </Link>
               );
             })}
+
+            {/* Sound toggle */}
+            <button
+              onClick={(e) => { e.stopPropagation(); unlockAudio(); setSoundOn((s) => !s); }}
+              title={soundOn ? "Désactiver le son" : "Activer le son"}
+              className={`flex items-center gap-1 px-3 py-2 rounded-full text-xs tracking-wider uppercase transition ${soundOn ? "text-primary" : "text-foreground/30"}`}>
+              <Bell className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{soundOn ? "Son ON" : "Son OFF"}</span>
+            </button>
+
             <button onClick={signOut}
               className="flex items-center gap-2 px-3 py-2 text-xs tracking-wider uppercase text-foreground/60 hover:text-destructive transition">
               <LogOut className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Sortir</span>
