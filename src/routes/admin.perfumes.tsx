@@ -104,17 +104,28 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
 
   const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) => setForm((f) => ({ ...f, [k]: v }));
 
-  const upload = async (file: File) => {
+  const upload = (file: File) => {
     setUploading(true);
-    try {
-      const ext = file.name.split(".").pop() || "jpg";
-      const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const { error } = await supabase.storage.from("perfume-images").upload(path, file, { cacheControl: "3600", upsert: false });
-      if (error) throw error;
-      const { data: pub } = supabase.storage.from("perfume-images").getPublicUrl(path);
-      set("image_url", pub.publicUrl);
-    } catch (e) { alert(e instanceof Error ? e.message : "Upload failed"); }
-    finally { setUploading(false); }
+    // Resize to max 600px wide, then convert to base64 stored directly in image_url.
+    // No external storage bucket needed — the data URL lives in the DB column.
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      const MAX = 600;
+      const scale = img.width > MAX ? MAX / img.width : 1;
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d")!.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+      set("image_url", dataUrl);
+      setUploading(false);
+    };
+    img.onerror = () => { alert("Impossible de lire l'image."); setUploading(false); };
+    img.src = objectUrl;
   };
 
   const submit = async (e: React.FormEvent) => {
