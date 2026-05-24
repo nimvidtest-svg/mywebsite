@@ -89,10 +89,37 @@ export const categories: Category[] = ["BEST SELLERS", "FEMMES", "HOMMES", "NICH
 
 const localBottleMap = new Map(localPerfumes.map((p) => [p.id, p.image]));
 
+// Category → deterministic bottle image pool (same as perfumes.ts)
+import bottleGreen from "@/assets/bottle-green.jpg";
+import bottleBlack from "@/assets/bottle-black.jpg";
+import bottleTurquoise from "@/assets/bottle-turquoise.jpg";
+import bottleBurgundy from "@/assets/bottle-burgundy.jpg";
+import bottleNavy from "@/assets/bottle-navy.jpg";
+import bottleRose from "@/assets/bottle-rose.jpg";
+import bottleGold from "@/assets/bottle-gold.jpg";
+import bottlePurple from "@/assets/bottle-purple.jpg";
+
+const CATEGORY_BOTTLES: Record<string, string[]> = {
+  FEMMES:         [bottleRose, bottlePurple, bottleBurgundy, bottleTurquoise],
+  HOMMES:         [bottleBlack, bottleNavy, bottleGreen],
+  NICHE:          [bottleGold, bottlePurple, bottleTurquoise],
+  ORIENTAUX:      [bottleGold, bottleBurgundy, bottleBlack],
+  "BEST SELLERS": [bottleGold],
+};
+const _hash = (s: string) => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h); };
+const categoryBottle = (p: Perfume) => {
+  const pool = CATEGORY_BOTTLES[p.category] ?? [bottleGold];
+  return pool[_hash(`${p.brand}-${p.name}`) % pool.length];
+};
+
 const applyImages = (rows: Perfume[]): Perfume[] =>
   rows.map((p) => {
+    // Admin uploaded a real image → use it as-is
+    if (p.image_url) return p;
+    // Otherwise resolve from local bottle assets (by brand+name key, then category)
     const key = `${_slug(p.brand)}-${_slug(p.name)}`;
-    return { ...p, image_url: perfumeImages[key] ?? localBottleMap.get(key) ?? p.image_url };
+    const resolved = perfumeImages[key] ?? localBottleMap.get(key) ?? categoryBottle(p);
+    return { ...p, image_url: resolved };
   });
 
 const localFallback = (): Perfume[] =>
