@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { fetchPerfumes, type Perfume, type Category, type Gender, type Scent, type StockStatus, categories, scents } from "@/lib/api";
+import { fetchPerfumes, type Perfume, type Category, type Gender, type StockStatus, categories } from "@/lib/api";
 import { Plus, Pencil, Trash2, X, Loader2, Star, StarOff, Upload } from "lucide-react";
 
 export const Route = createFileRoute("/admin/perfumes")({ component: AdminPerfumes });
@@ -135,20 +135,15 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
         <div className="grid grid-cols-2 gap-3">
           <Input label="Nom" value={form.name} onChange={(v) => set("name", v)} />
           <Input label="Marque" value={form.brand} onChange={(v) => set("brand", v)} />
+          <Input label="Prix (DH)" type="number" value={String(form.price)} onChange={(v) => set("price", Number(v) || 0)} />
+          <Select label="Stock" value={form.stock_status} onChange={(v) => set("stock_status", v as StockStatus)}
+            options={["in_stock","low_stock","out_of_stock"]}
+            labels={{ in_stock: "En stock", low_stock: "Stock limité", out_of_stock: "Rupture" }} />
           <Select label="Catégorie" value={form.category} onChange={(v) => set("category", v as Category)} options={categories} />
           <Select label="Genre" value={form.gender} onChange={(v) => set("gender", v as Gender)} options={["Femme", "Homme", "Mixte"]} />
-          <Input label="Prix (DH)" type="number" value={String(form.price)} onChange={(v) => set("price", Number(v) || 0)} />
-          <Input label="Ordre" type="number" value={String(form.sort_order)} onChange={(v) => set("sort_order", Number(v) || 0)} />
-          <Select label="Senteur" value={form.scent} onChange={(v) => set("scent", v as Scent)} options={scents.map(s => s.value)} labels={scents.reduce((a,s)=>({...a,[s.value]:s.label}),{} as Record<string,string>)} />
-          <Select label="Stock" value={form.stock_status} onChange={(v) => set("stock_status", v as StockStatus)} options={["in_stock","low_stock","out_of_stock"]} labels={{in_stock:"En stock",low_stock:"Stock limité",out_of_stock:"Rupture"}} />
         </div>
 
-        <div>
-          <label className="text-xs tracking-[0.15em] text-primary uppercase mb-1.5 block">Description</label>
-          <textarea value={form.description} onChange={(e) => set("description", e.target.value)} rows={3}
-            className="w-full px-4 py-3 rounded-xl bg-noir border border-primary/20 focus:border-primary focus:outline-none" />
-        </div>
-
+        {/* Image */}
         <div>
           <label className="text-xs tracking-[0.15em] text-primary uppercase mb-1.5 block">Image</label>
           <div className="flex gap-3 items-center">
@@ -164,11 +159,6 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
             </div>
           </div>
         </div>
-
-        <label className="flex items-center gap-3 text-sm">
-          <input type="checkbox" checked={form.best_seller} onChange={(e) => set("best_seller", e.target.checked)} />
-          Marquer comme Best Seller
-        </label>
 
         <button type="submit" disabled={saving}
           className="w-full py-3 rounded-full bg-gradient-gold text-primary-foreground font-medium shadow-gold disabled:opacity-50 flex items-center justify-center gap-2">
