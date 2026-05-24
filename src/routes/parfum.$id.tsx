@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { ArrowLeft, MessageCircle, Tag, User, Sparkles, Star, Minus, Plus, ChevronDown } from "lucide-react";
+import { ArrowLeft, MessageCircle, Tag, User, Sparkles, Star, Minus, Plus, ChevronDown, CheckCircle2 } from "lucide-react";
 import { fetchPerfumes, createOrder, type Perfume } from "@/lib/api";
 import { openWhatsapp } from "@/lib/whatsapp";
 import { Navbar } from "@/components/site/Navbar";
@@ -237,19 +237,21 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
           <div className="pt-6 border-t border-primary/15">
             <p className="text-xs tracking-[0.3em] text-primary uppercase mb-4">Commande Directe</p>
             {submitted ? (
-              <div className="text-center py-6">
-                <div className="w-14 h-14 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-3">
-                  <MessageCircle className="w-7 h-7 text-primary-foreground" />
+              <div className="py-6 flex flex-col gap-4">
+                <div className="flex items-center gap-3 glass gold-border rounded-2xl px-5 py-4">
+                  <CheckCircle2 className="w-8 h-8 text-primary flex-shrink-0" />
+                  <div>
+                    <p className="font-display text-xl text-foreground">Commande passée !</p>
+                    <p className="text-sm text-muted-foreground mt-0.5">WhatsApp s'ouvre — notre équipe vous confirme sous peu.</p>
+                  </div>
                 </div>
-                <h3 className="font-display text-xl mb-1">Commande envoyée !</h3>
-                <p className="text-muted-foreground text-sm">WhatsApp s'ouvre — notre équipe vous confirme sous peu.</p>
-                <button
-                  type="button"
-                  onClick={() => setSubmitted(false)}
-                  className="mt-4 px-5 py-2 rounded-full glass border border-primary/30 text-sm text-primary hover:bg-primary/10 transition"
+                <Link
+                  to="/"
+                  hash="catalogue"
+                  className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.02] transition text-sm"
                 >
-                  Passer une autre commande
-                </button>
+                  Voir le catalogue
+                </Link>
               </div>
             ) : (
               <form onSubmit={submitForm} className="space-y-3">
