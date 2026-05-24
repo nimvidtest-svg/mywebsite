@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { ArrowLeft, MessageCircle, Tag, User, Sparkles, Star, Minus, Plus, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Tag, User, Sparkles, Star, Minus, Plus, CheckCircle2 } from "lucide-react";
 import { fetchPerfumes, createOrder, type Perfume } from "@/lib/api";
 import { Navbar } from "@/components/site/Navbar";
 import { AnnouncementBar } from "@/components/site/AnnouncementBar";
@@ -229,7 +229,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
                   <CheckCircle2 className="w-8 h-8 text-primary flex-shrink-0" />
                   <div>
                     <p className="font-display text-xl text-foreground">Commande passée !</p>
-                    <p className="text-sm text-muted-foreground mt-0.5">WhatsApp s'ouvre — notre équipe vous confirme sous peu.</p>
+                    <p className="text-sm text-muted-foreground mt-0.5">Votre commande a bien été reçue — notre équipe vous contacte sous peu.</p>
                   </div>
                 </div>
                 <Link
@@ -260,8 +260,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
                   disabled={out || !form.name || !form.phone || !form.city || !form.address}
                   className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.01] transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
                 >
-                  <MessageCircle className="w-5 h-5" />
-                  Confirmer la commande · {totalPrice} DH
+                  Commander · {totalPrice} DH
                 </button>
               </form>
             )}

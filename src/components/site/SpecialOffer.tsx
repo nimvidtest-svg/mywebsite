@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Truck, Gift, Sparkles, Check, X } from "lucide-react";
+import { Truck, Gift, Sparkles, Check, X, CheckCircle2 } from "lucide-react";
 import offerImg from "@/assets/offer-3parfums.jpeg";
 import { fetchPerfumes, fetchSetting, createOrder, type OfferSettings } from "@/lib/api";
 
@@ -15,6 +15,7 @@ export function SpecialOffer() {
   const [ville, setVille] = useState("");
   const [adresse, setAdresse] = useState("");
   const [tel, setTel] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   const { data: perfumes = [] } = useQuery({ queryKey: ["perfumes"], queryFn: fetchPerfumes });
   const { data: offer } = useQuery({
@@ -50,7 +51,7 @@ export function SpecialOffer() {
         total: o.price, type: "offer_3", notes: "Offre 199 DH · testeur inclus",
       });
     } catch (err) { console.error(err); }
-    setOpen(false);
+    setSubmitted(true);
   };
 
   return (
@@ -123,37 +124,54 @@ export function SpecialOffer() {
                 <p className="text-sm text-muted-foreground mt-2">Livraison gratuite + testeur offert</p>
               </div>
 
-              <form onSubmit={submit} className="space-y-4">
-                {[
-                  { label: "Parfum 1", value: p1, set: setP1 },
-                  { label: "Parfum 2", value: p2, set: setP2 },
-                  { label: "Parfum 3", value: p3, set: setP3 },
-                ].map((f) => (
-                  <div key={f.label}>
-                    <label className="text-xs tracking-[0.15em] text-primary uppercase mb-1.5 block">{f.label}</label>
-                    <select required value={f.value} onChange={(e) => f.set(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-noir border border-primary/20 text-foreground focus:border-primary focus:outline-none transition">
-                      <option value="">— Choisir un parfum —</option>
-                      {sorted.map((p) => (
-                        <option key={p.id} value={`${p.name} (${p.brand})`}>{p.brand} — {p.name}</option>
-                      ))}
-                    </select>
+              {submitted ? (
+                <div className="flex flex-col items-center gap-5 py-4 text-center">
+                  <div className="flex items-center gap-3 glass gold-border rounded-2xl px-6 py-5 w-full">
+                    <CheckCircle2 className="w-9 h-9 text-primary flex-shrink-0" />
+                    <div className="text-left">
+                      <p className="font-display text-xl">Commande passée !</p>
+                      <p className="text-sm text-muted-foreground mt-0.5">Notre équipe vous contacte très bientôt.</p>
+                    </div>
                   </div>
-                ))}
-
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                  <Field label="Prénom" value={prenom} onChange={setPrenom} />
-                  <Field label="Nom" value={nom} onChange={setNom} />
-                  <Field label="Ville" value={ville} onChange={setVille} />
-                  <Field label="Téléphone" value={tel} onChange={setTel} type="tel" />
+                  <button
+                    onClick={() => { setOpen(false); setSubmitted(false); setP1(""); setP2(""); setP3(""); setNom(""); setPrenom(""); setVille(""); setAdresse(""); setTel(""); }}
+                    className="w-full py-3.5 rounded-full glass border border-primary/30 text-primary font-medium text-sm hover:bg-primary/10 transition">
+                    Fermer
+                  </button>
                 </div>
-                <Field label="Adresse" value={adresse} onChange={setAdresse} />
+              ) : (
+                <form onSubmit={submit} className="space-y-4">
+                  {[
+                    { label: "Parfum 1", value: p1, set: setP1 },
+                    { label: "Parfum 2", value: p2, set: setP2 },
+                    { label: "Parfum 3", value: p3, set: setP3 },
+                  ].map((f) => (
+                    <div key={f.label}>
+                      <label className="text-xs tracking-[0.15em] text-primary uppercase mb-1.5 block">{f.label}</label>
+                      <select required value={f.value} onChange={(e) => f.set(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-noir border border-primary/20 text-foreground focus:border-primary focus:outline-none transition">
+                        <option value="">— Choisir un parfum —</option>
+                        {sorted.map((p) => (
+                          <option key={p.id} value={`${p.name} (${p.brand})`}>{p.brand} — {p.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  ))}
 
-                <button type="submit" disabled={!valid}
-                  className="w-full mt-2 px-8 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.01] transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
-                  Commander sur WhatsApp · {o.price} DH
-                </button>
-              </form>
+                  <div className="grid grid-cols-2 gap-4 pt-2">
+                    <Field label="Prénom" value={prenom} onChange={setPrenom} />
+                    <Field label="Nom" value={nom} onChange={setNom} />
+                    <Field label="Ville" value={ville} onChange={setVille} />
+                    <Field label="Téléphone" value={tel} onChange={setTel} type="tel" />
+                  </div>
+                  <Field label="Adresse" value={adresse} onChange={setAdresse} />
+
+                  <button type="submit" disabled={!valid}
+                    className="w-full mt-2 px-8 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.01] transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+                    Commander · {o.price} DH
+                  </button>
+                </form>
+              )}
             </div>
           </motion.div>
         </div>

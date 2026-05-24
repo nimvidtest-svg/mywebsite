@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Sparkles, Award, Leaf, HeartHandshake } from "lucide-react";
-import offerImg from "@/assets/offer-3parfums.jpeg";
+import collectionImg from "@/assets/collection.png";
 
 const PILLARS = [
   { icon: Award, label: "Qualité Premium", desc: "Inspiré des grandes maisons" },
@@ -24,7 +24,7 @@ export function About() {
           >
             <div className="relative rounded-3xl overflow-hidden glass gold-border h-[380px] md:h-[480px]">
               <img
-                src={offerImg}
+                src={collectionImg}
                 alt="Collection Unique Parfum"
                 className="w-full h-full object-cover object-center opacity-80"
               />
