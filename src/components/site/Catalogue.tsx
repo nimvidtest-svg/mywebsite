@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, X } from "lucide-react";
 import { fetchPerfumes, categories, type Category } from "@/lib/api";
 import { PerfumeCard } from "./PerfumeCard";
 
@@ -14,14 +14,17 @@ export function Catalogue() {
     queryFn: fetchPerfumes,
   });
 
+  const q = query.trim().toLowerCase();
+
   const list = useMemo(() => {
     return perfumes.filter((p) => {
-      const matchCat = active === "BEST SELLERS" ? p.best_seller : p.category === active;
-      const q = query.trim().toLowerCase();
       const matchQ = !q || p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q);
-      return matchCat && matchQ;
+      // When searching, ignore category and search everything
+      if (q) return matchQ;
+      const matchCat = active === "BEST SELLERS" ? p.best_seller : p.category === active;
+      return matchCat;
     });
-  }, [active, query, perfumes]);
+  }, [active, q, perfumes]);
 
   return (
     <section id="catalogue" className="relative py-24 md:py-32">
@@ -48,9 +51,18 @@ export function Catalogue() {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Rechercher un parfum..."
-              className="w-full glass rounded-full pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary/50"
+              placeholder="Rechercher par nom ou marque..."
+              className="w-full glass rounded-full pl-11 pr-10 py-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary/50"
             />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 
