@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { isLoggedIn, logout } from "@/lib/auth";
-import { LogOut, Package, ShoppingBag, Settings as SettingsIcon, LayoutDashboard, Bell } from "lucide-react";
+import { LogOut, Package, ShoppingBag, LayoutDashboard, Bell } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { playNewOrder, unlockAudio } from "@/lib/sounds";
@@ -71,7 +71,6 @@ function AdminLayout() {
     { to: "/admin",          label: "Dashboard",   icon: LayoutDashboard, exact: true },
     { to: "/admin/perfumes", label: "Parfums",      icon: Package },
     { to: "/admin/orders",   label: "Commandes",    icon: ShoppingBag, badge: newCount },
-    { to: "/admin/settings", label: "Paramètres",   icon: SettingsIcon },
   ];
 
   return (
