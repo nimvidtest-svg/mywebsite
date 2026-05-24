@@ -4,7 +4,6 @@ import { AnnouncementBar } from "@/components/site/AnnouncementBar";
 import { Hero } from "@/components/site/Hero";
 import { TrustBadges } from "@/components/site/TrustBadges";
 import { SpecialOffer } from "@/components/site/SpecialOffer";
-import { Categories } from "@/components/site/Categories";
 import { About } from "@/components/site/About";
 import { Catalogue } from "@/components/site/Catalogue";
 import { Reviews } from "@/components/site/Reviews";
@@ -33,7 +32,6 @@ function Index() {
         <Hero />
         <TrustBadges />
         <SpecialOffer />
-        <Categories />
         <About />
         <Catalogue />
         <Reviews />
