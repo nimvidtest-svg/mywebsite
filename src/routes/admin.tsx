@@ -3,6 +3,7 @@ import { isLoggedIn, logout } from "@/lib/auth";
 import { LogOut, Package, ShoppingBag, Settings as SettingsIcon, LayoutDashboard } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { playNewOrder } from "@/lib/sounds";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
@@ -31,7 +32,7 @@ function AdminLayout() {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "orders" },
-        () => setNewCount((n) => n + 1),
+        () => { setNewCount((n) => n + 1); playNewOrder(); },
       )
       .on(
         "postgres_changes",
