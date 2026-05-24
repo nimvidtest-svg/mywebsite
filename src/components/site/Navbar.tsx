@@ -28,14 +28,24 @@ export function Navbar() {
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
+        {/* Logo — big at top, shrinks on scroll */}
         <a href="/" className="flex items-center gap-3">
-          <img src={logo} alt="Unique Parfum" className="h-10 w-auto"
-            style={{ filter: "invert(1) sepia(1) saturate(5) hue-rotate(5deg) brightness(0.9)" }} />
-          <span className="hidden sm:flex items-baseline gap-2 font-display tracking-wider">
+          <motion.img
+            src={logo}
+            alt="Unique Parfum"
+            animate={{ height: scrolled ? 36 : 56 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="w-auto"
+            style={{ filter: "invert(1) sepia(1) saturate(5) hue-rotate(5deg) brightness(0.9)" }}
+          />
+          <motion.span
+            animate={{ opacity: scrolled ? 0 : 1, x: scrolled ? -8 : 0 }}
+            transition={{ duration: 0.3 }}
+            className="hidden sm:flex items-baseline gap-2 font-display tracking-wider pointer-events-none"
+          >
             <span className="text-xl text-gradient-gold">Unique Parfum</span>
             <span className="text-base text-primary/80 italic">— Salé</span>
-          </span>
+          </motion.span>
         </a>
 
         {/* Desktop nav */}
