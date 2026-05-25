@@ -27,16 +27,6 @@ export function Hero() {
 
       <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center py-16">
         <div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 glass-gold rounded-full px-4 py-1.5 mb-6"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs tracking-[0.2em] text-primary uppercase">Unique Parfum · Salé</span>
-          </motion.div>
-
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
