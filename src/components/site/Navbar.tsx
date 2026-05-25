@@ -33,7 +33,7 @@ export function Navbar() {
           <motion.img
             src={logo}
             alt="Unique Parfum"
-            animate={{ height: scrolled ? 36 : 56 }}
+            animate={{ height: scrolled ? 68 : 110 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="w-auto"
             style={{ filter: "invert(1) sepia(1) saturate(5) hue-rotate(5deg) brightness(0.9)" }}
