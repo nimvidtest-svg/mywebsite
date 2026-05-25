@@ -43,8 +43,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.1 }}
             className="font-display text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-6"
           >
-            <span className="block text-foreground">Plus de parfum.</span>
-            <span className="block shimmer-text italic font-light">Moins d'alcool.</span>
+            <span className="block shimmer-text italic font-light">L'excellence en chaque goutte.</span>
           </motion.h1>
 
           <motion.p
