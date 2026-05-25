@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { ArrowLeft, Tag, User, Sparkles, Star, Minus, Plus, CheckCircle2 } from "lucide-react";
 import { fetchPerfumes, createOrder, type Perfume } from "@/lib/api";
 import { Navbar } from "@/components/site/Navbar";
@@ -80,7 +80,7 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
 
   const handleQty = (delta: number) => setQty((q) => Math.max(1, Math.min(99, q + delta)));
 
-  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.city || !form.address) return;
     createOrder({
@@ -168,69 +168,16 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
             </span>
           </div>
 
-          {/* Taille */}
-          <div className="mb-5">
-            <p className="text-xs tracking-widest uppercase text-primary mb-2">Taille</p>
-            <div className="flex gap-3">
-              {SIZES.map((s) => (
-                <button
-                  key={s.label}
-                  type="button"
-                  onClick={() => setSize(s)}
-                  className={`px-5 py-2.5 rounded-xl border text-sm font-medium transition ${
-                    size.label === s.label
-                      ? "bg-gradient-gold text-primary-foreground border-transparent shadow-gold"
-                      : "glass border-primary/30 text-foreground/70 hover:border-primary/60"
-                  }`}
-                >
-                  {s.label} — {s.price} DH
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Prix */}
-          <div className="flex items-baseline gap-3 mb-6">
-            <span className="font-display text-6xl text-gradient-gold">{totalPrice}</span>
-            <span className="text-2xl text-muted-foreground">DH</span>
-            {qty > 1 && <span className="text-sm text-muted-foreground">({unitPrice} × {qty})</span>}
-          </div>
-
-          {/* Quantité */}
-          <div className="mb-6">
-            <p className="text-xs tracking-widest uppercase text-primary mb-2">Quantité</p>
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => handleQty(-1)}
-                disabled={qty <= 1}
-                className="w-10 h-10 rounded-full glass border border-primary/30 flex items-center justify-center text-primary hover:bg-primary/10 transition disabled:opacity-30 disabled:cursor-not-allowed"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-              <span className="font-display text-2xl w-8 text-center">{qty}</span>
-              <button
-                type="button"
-                onClick={() => handleQty(1)}
-                disabled={qty >= 99}
-                className="w-10 h-10 rounded-full glass border border-primary/30 flex items-center justify-center text-primary hover:bg-primary/10 transition disabled:opacity-30"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Formulaire de commande intégré */}
-          <div className="pt-6 border-t border-primary/15">
-            <p className="text-xs tracking-[0.3em] text-primary uppercase mb-4">Commande Directe</p>
-            {submitted ? (
-              <div className="py-6 flex flex-col gap-4">
-                <div className="flex items-center gap-3 glass gold-border rounded-2xl px-5 py-4">
-                  <CheckCircle2 className="w-8 h-8 text-primary flex-shrink-0" />
-                  <div>
-                    <p className="font-display text-xl text-foreground">Commande passée !</p>
-                    <p className="text-sm text-muted-foreground mt-0.5">Votre commande a bien été reçue — notre équipe vous contacte sous peu.</p>
-                  </div>
+          {out ? (
+            /* ── Rupture de stock ── */
+            <div className="pt-6 border-t border-primary/15">
+              <div className="flex flex-col items-center justify-center gap-4 py-8 rounded-2xl glass border border-destructive/30 bg-destructive/5 text-center px-6">
+                <div className="w-14 h-14 rounded-full bg-destructive/10 flex items-center justify-center">
+                  <span className="text-2xl">🚫</span>
+                </div>
+                <div>
+                  <p className="font-display text-2xl text-foreground mb-1">Rupture de stock</p>
+                  <p className="text-sm text-muted-foreground">Ce produit est temporairement indisponible. Revenez bientôt ou découvrez nos autres parfums.</p>
                 </div>
                 <Link
                   to="/"
@@ -239,32 +186,109 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
                 >
                   Voir le catalogue
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => { setSubmitted(false); setForm({ name: "", address: "", phone: "", city: "" }); }}
-                  className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full glass border border-primary/30 text-primary font-medium text-sm hover:bg-primary/10 transition"
-                >
-                  Commander à nouveau ce produit
-                </button>
               </div>
-            ) : (
-              <form onSubmit={submitForm} className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
-                  <OrderField label="Nom complet" value={form.name} onChange={(v) => setForm((f) => ({ ...f, name: v }))} placeholder="Ahmed Benali" />
-                  <OrderField label="Téléphone" type="tel" value={form.phone} onChange={(v) => setForm((f) => ({ ...f, phone: v }))} placeholder="+212 6XX XXX XXX" />
-                  <OrderField label="Ville" value={form.city} onChange={(v) => setForm((f) => ({ ...f, city: v }))} placeholder="Casablanca" />
-                  <OrderField label="Adresse" value={form.address} onChange={(v) => setForm((f) => ({ ...f, address: v }))} placeholder="123 Rue Hassan II" />
+            </div>
+          ) : (
+            <>
+              {/* Taille */}
+              <div className="mb-5">
+                <p className="text-xs tracking-widest uppercase text-primary mb-2">Taille</p>
+                <div className="flex gap-3">
+                  {SIZES.map((s) => (
+                    <button
+                      key={s.label}
+                      type="button"
+                      onClick={() => setSize(s)}
+                      className={`px-5 py-2.5 rounded-xl border text-sm font-medium transition ${
+                        size.label === s.label
+                          ? "bg-gradient-gold text-primary-foreground border-transparent shadow-gold"
+                          : "glass border-primary/30 text-foreground/70 hover:border-primary/60"
+                      }`}
+                    >
+                      {s.label} — {s.price} DH
+                    </button>
+                  ))}
                 </div>
-                <button
-                  type="submit"
-                  disabled={out || !form.name || !form.phone || !form.city || !form.address}
-                  className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.01] transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
-                >
-                  Commander · {totalPrice} DH
-                </button>
-              </form>
-            )}
-          </div>
+              </div>
+
+              {/* Prix */}
+              <div className="flex items-baseline gap-3 mb-6">
+                <span className="font-display text-6xl text-gradient-gold">{totalPrice}</span>
+                <span className="text-2xl text-muted-foreground">DH</span>
+                {qty > 1 && <span className="text-sm text-muted-foreground">({unitPrice} × {qty})</span>}
+              </div>
+
+              {/* Quantité */}
+              <div className="mb-6">
+                <p className="text-xs tracking-widest uppercase text-primary mb-2">Quantité</p>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleQty(-1)}
+                    disabled={qty <= 1}
+                    className="w-10 h-10 rounded-full glass border border-primary/30 flex items-center justify-center text-primary hover:bg-primary/10 transition disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    <Minus className="w-4 h-4" />
+                  </button>
+                  <span className="font-display text-2xl w-8 text-center">{qty}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleQty(1)}
+                    disabled={qty >= 99}
+                    className="w-10 h-10 rounded-full glass border border-primary/30 flex items-center justify-center text-primary hover:bg-primary/10 transition disabled:opacity-30"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Formulaire de commande intégré */}
+              <div className="pt-6 border-t border-primary/15">
+                <p className="text-xs tracking-[0.3em] text-primary uppercase mb-4">Commande Directe</p>
+                {submitted ? (
+                  <div className="py-6 flex flex-col gap-4">
+                    <div className="flex items-center gap-3 glass gold-border rounded-2xl px-5 py-4">
+                      <CheckCircle2 className="w-8 h-8 text-primary flex-shrink-0" />
+                      <div>
+                        <p className="font-display text-xl text-foreground">Commande passée !</p>
+                        <p className="text-sm text-muted-foreground mt-0.5">Votre commande a bien été reçue — notre équipe vous contacte sous peu.</p>
+                      </div>
+                    </div>
+                    <Link
+                      to="/"
+                      hash="catalogue"
+                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.02] transition text-sm"
+                    >
+                      Voir le catalogue
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => { setSubmitted(false); setForm({ name: "", address: "", phone: "", city: "" }); }}
+                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full glass border border-primary/30 text-primary font-medium text-sm hover:bg-primary/10 transition"
+                    >
+                      Commander à nouveau ce produit
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={submitForm} className="space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      <OrderField label="Nom complet" value={form.name} onChange={(v) => setForm((f) => ({ ...f, name: v }))} placeholder="Ahmed Benali" />
+                      <OrderField label="Téléphone" type="tel" value={form.phone} onChange={(v) => setForm((f) => ({ ...f, phone: v }))} placeholder="+212 6XX XXX XXX" />
+                      <OrderField label="Ville" value={form.city} onChange={(v) => setForm((f) => ({ ...f, city: v }))} placeholder="Casablanca" />
+                      <OrderField label="Adresse" value={form.address} onChange={(v) => setForm((f) => ({ ...f, address: v }))} placeholder="123 Rue Hassan II" />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={!form.name || !form.phone || !form.city || !form.address}
+                      className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-gradient-gold text-primary-foreground font-medium tracking-wide shadow-gold hover:scale-[1.01] transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 mt-1"
+                    >
+                      Commander · {totalPrice} DH
+                    </button>
+                  </form>
+                )}
+              </div>
+            </>
+          )}
 
           {/* Composition */}
           <div className="mt-6 pt-6 border-t border-primary/15">
