@@ -34,7 +34,7 @@ export function SpecialOffer() {
 
   const o: OfferSettings = offer ?? {
     enabled: true, badge: "Offre Spéciale", title1: "3 Parfums", title2: "Extrait de Parfum",
-    price: 199, old_price_text: "au lieu de 150 DH × 3",
+    price: 199, old_price_text: "au lieu de 299 DH",
     cta: "Choisir mes 3 parfums",
     features: ["Choisissez 3 parfums dans tout le catalogue", "1 testeur offert avec votre commande", "Livraison gratuite partout au Maroc"],
     image_url: "",
@@ -72,10 +72,15 @@ export function SpecialOffer() {
                 <span className="text-xs tracking-[0.2em] text-primary uppercase">{o.badge}</span>
               </div>
 
-              <h2 className="font-display text-4xl md:text-5xl leading-tight mb-4">
+              <h2 className="font-display text-4xl md:text-5xl leading-tight mb-3">
                 <span className="block text-foreground">{o.title1}</span>
                 <span className="block shimmer-text italic">{o.title2}</span>
               </h2>
+
+              <div className="inline-flex items-center gap-2 glass rounded-full px-3 py-1 mb-5 self-start border border-primary/20">
+                <Sparkles className="w-3 h-3 text-primary" />
+                <span className="text-xs text-primary tracking-widest">50ml · le flacon</span>
+              </div>
 
               <div className="flex items-baseline gap-2 mb-6">
                 <span className="font-display text-6xl md:text-7xl text-gradient-gold">{o.price}</span>
