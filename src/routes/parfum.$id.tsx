@@ -218,9 +218,9 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
                 <span className="text-2xl text-muted-foreground">DH</span>
                 {qty > 1 && <span className="text-sm text-muted-foreground">({unitPrice} × {qty})</span>}
               </div>
-              <p className="text-xs text-muted-foreground/70 -mt-4 mb-6 flex items-center gap-1.5">
-                <Truck className="w-3.5 h-3.5 text-primary/60 flex-shrink-0" />
-                Livraison incluse · tarif variable selon la ville
+              <p className="text-sm text-muted-foreground -mt-4 mb-6 flex items-center gap-2">
+                <Truck className="w-4 h-4 text-primary flex-shrink-0" />
+                Des frais de livraison peuvent s'ajouter selon votre ville
               </p>
 
               {/* Quantité */}
