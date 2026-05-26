@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
-import { ArrowLeft, Tag, User, Sparkles, Star, Minus, Plus, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Tag, User, Sparkles, Star, Minus, Plus, CheckCircle2, Truck } from "lucide-react";
 import { fetchPerfumes, createOrder, type Perfume } from "@/lib/api";
 import { Navbar } from "@/components/site/Navbar";
 import { AnnouncementBar } from "@/components/site/AnnouncementBar";
@@ -63,6 +63,7 @@ function ProductPage() {
 const SIZES = [
   { label: "50ml", price: 50 },
   { label: "70ml", price: 70 },
+  { label: "100ml", price: 100 },
 ];
 const STAR_RATING = 5;
 
@@ -217,6 +218,10 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
                 <span className="text-2xl text-muted-foreground">DH</span>
                 {qty > 1 && <span className="text-sm text-muted-foreground">({unitPrice} × {qty})</span>}
               </div>
+              <p className="text-xs text-muted-foreground/70 -mt-4 mb-6 flex items-center gap-1.5">
+                <Truck className="w-3.5 h-3.5 text-primary/60 flex-shrink-0" />
+                Livraison incluse · tarif variable selon la ville
+              </p>
 
               {/* Quantité */}
               <div className="mb-6">
