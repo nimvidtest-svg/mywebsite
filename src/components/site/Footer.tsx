@@ -41,7 +41,7 @@ export function Footer() {
           <div>
             <h4 className="text-xs tracking-[0.3em] uppercase text-primary mb-4">Contact</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-center gap-3"><MessageCircle className="w-4 h-4 text-primary flex-shrink-0"/>+212 701 778 254</li>
+              <li className="flex items-center gap-3"><MessageCircle className="w-4 h-4 text-primary flex-shrink-0"/>06 00 00 00 00</li>
               <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-primary flex-shrink-0"/>contact@uniqueparfum.ma</li>
               <li className="flex items-start gap-3"><MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5"/>Salé, Maroc · Livraison nationale</li>
             </ul>
@@ -52,7 +52,7 @@ export function Footer() {
             <h4 className="text-xs tracking-[0.3em] uppercase text-primary mb-4">Suivez-nous</h4>
             <div className="flex gap-3 mb-6">
               {[
-                { Icon: MessageCircle, href: "https://wa.me/212701778254" },
+                { Icon: MessageCircle, href: "https://wa.me/212600000000" },
                 { Icon: Instagram, href: "https://instagram.com" },
                 { Icon: Music2, href: "https://tiktok.com" },
               ].map(({ Icon, href }, i) => (
