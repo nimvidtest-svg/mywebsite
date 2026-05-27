@@ -4,8 +4,9 @@ import logo from "@/assets/logo.png";
 
 // Using /#hash so links work from any page (product pages, etc.)
 const links = [
-  { href: "/#catalogue", label: "Catalogue" },
-  { href: "/#about",     label: "À Propos" },
+  { href: "/#catalogue",  label: "Catalogue" },
+  { href: "/parfumeur",   label: "Devenir Parfumeur" },
+  { href: "/#about",      label: "À Propos" },
 ];
 
 export function Navbar() {
