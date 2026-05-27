@@ -7,8 +7,8 @@ import { Footer } from "@/components/site/Footer";
 import { FloatingWhatsapp } from "@/components/site/FloatingWhatsapp";
 import { openWhatsapp } from "@/lib/whatsapp";
 import collectionImg from "@/assets/collection.png";
-import huileImg from "@/assets/huile de parfum.png";
-import bouteilleImg from "@/assets/boutielle vide.png";
+import huileImg from "@/assets/huile-de-parfum.png";
+import bouteilleImg from "@/assets/boutielle-vide.png";
 import offerImg from "@/assets/offer-3parfums.jpeg";
 
 export const Route = createFileRoute("/parfumeur")({
