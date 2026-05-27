@@ -24,8 +24,8 @@ export function Navbar() {
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className={`fixed top-7 md:top-8 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass py-1" : "bg-transparent py-2"
+      className={`fixed top-7 md:top-8 inset-x-0 z-50 transition-all duration-500 bg-primary/50 backdrop-blur-md ${
+        scrolled ? "py-1" : "py-2"
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
@@ -53,7 +53,7 @@ export function Navbar() {
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <a key={l.href} href={l.href}
-              className="text-sm tracking-wide text-foreground/80 hover:text-primary transition-colors">
+              className="text-sm tracking-wide text-black/80 hover:text-black transition-colors font-medium">
               {l.label}
             </a>
           ))}
@@ -64,10 +64,10 @@ export function Navbar() {
         </nav>
 
         {/* Mobile burger */}
-        <button onClick={() => setOpen(!open)} className="md:hidden text-foreground" aria-label="Menu">
-          <div className="w-6 h-0.5 bg-primary mb-1.5" />
-          <div className="w-6 h-0.5 bg-primary mb-1.5" />
-          <div className="w-4 h-0.5 bg-primary" />
+        <button onClick={() => setOpen(!open)} className="md:hidden text-black" aria-label="Menu">
+          <div className="w-6 h-0.5 bg-black mb-1.5" />
+          <div className="w-6 h-0.5 bg-black mb-1.5" />
+          <div className="w-4 h-0.5 bg-black" />
         </button>
       </div>
 
@@ -80,7 +80,7 @@ export function Navbar() {
         >
           {links.map((l) => (
             <a key={l.href} href={l.href} onClick={() => setOpen(false)}
-              className="text-foreground/80 hover:text-primary transition-colors">
+              className="text-black/80 hover:text-black transition-colors font-medium">
               {l.label}
             </a>
           ))}
