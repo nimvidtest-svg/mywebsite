@@ -19,16 +19,18 @@ export const Route = createFileRoute("/parfumeur")({
 });
 
 const HUILES = [
-  { volume: "10ml", price: 30 },
-  { volume: "30ml", price: 70 },
-  { volume: "50ml", price: 110 },
-  { volume: "100ml", price: 200 },
+  { volume: "63ml",  price: 40 },
+  { volume: "125ml", price: 80 },
+  { volume: "250ml", price: 160 },
+  { volume: "500ml", price: 320 },
+  { volume: "1kg",   price: 640 },
 ];
 
 const BOUTEILLES = [
-  { label: "Flacon 30ml", price: 15 },
-  { label: "Flacon 50ml", price: 20 },
-  { label: "Flacon 100ml", price: 30 },
+  { label: "Flacon 20ml",  price: 4 },
+  { label: "Flacon 30ml",  price: 5 },
+  { label: "Flacon 50ml",  price: 7 },
+  { label: "Flacon 100ml", price: 10 },
 ];
 
 const AVANTAGES = [
