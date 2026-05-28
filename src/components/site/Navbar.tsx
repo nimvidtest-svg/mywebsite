@@ -53,7 +53,7 @@ export function Navbar() {
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <a key={l.href} href={l.href}
-              className="text-sm tracking-wide text-black/80 hover:text-black transition-colors font-medium">
+              className="text-base tracking-wide text-primary hover:text-primary/70 transition-colors font-semibold">
               {l.label}
             </a>
           ))}
@@ -80,7 +80,7 @@ export function Navbar() {
         >
           {links.map((l) => (
             <a key={l.href} href={l.href} onClick={() => setOpen(false)}
-              className="text-black/80 hover:text-black transition-colors font-medium">
+              className="text-base text-primary hover:text-primary/70 transition-colors font-semibold">
               {l.label}
             </a>
           ))}
