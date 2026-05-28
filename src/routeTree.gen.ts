@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ParfumeurRouteImport } from './routes/parfumeur'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -18,6 +19,11 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminPerfumesRouteImport } from './routes/admin.perfumes'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 
+const ParfumeurRoute = ParfumeurRouteImport.update({
+  id: '/parfumeur',
+  path: '/parfumeur',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/parfumeur': typeof ParfumeurRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/perfumes': typeof AdminPerfumesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/parfumeur': typeof ParfumeurRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/perfumes': typeof AdminPerfumesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/parfumeur': typeof ParfumeurRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/perfumes': typeof AdminPerfumesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/parfumeur'
     | '/admin/orders'
     | '/admin/perfumes'
     | '/admin/settings'
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/parfumeur'
     | '/admin/orders'
     | '/admin/perfumes'
     | '/admin/settings'
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/parfumeur'
     | '/admin/orders'
     | '/admin/perfumes'
     | '/admin/settings'
@@ -125,11 +137,19 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ParfumeurRoute: typeof ParfumeurRoute
   ParfumIdRoute: typeof ParfumIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/parfumeur': {
+      id: '/parfumeur'
+      path: '/parfumeur'
+      fullPath: '/parfumeur'
+      preLoaderRoute: typeof ParfumeurRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -209,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
+  ParfumeurRoute: ParfumeurRoute,
   ParfumIdRoute: ParfumIdRoute,
 }
 export const routeTree = rootRouteImport
