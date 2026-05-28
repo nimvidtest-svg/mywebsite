@@ -64,10 +64,10 @@ export function Navbar() {
         </nav>
 
         {/* Mobile burger */}
-        <button onClick={() => setOpen(!open)} className="md:hidden text-black" aria-label="Menu">
-          <div className="w-6 h-0.5 bg-black mb-1.5" />
-          <div className="w-6 h-0.5 bg-black mb-1.5" />
-          <div className="w-4 h-0.5 bg-black" />
+        <button onClick={() => setOpen(!open)} className="md:hidden text-primary" aria-label="Menu">
+          <div className="w-6 h-0.5 bg-primary mb-1.5" />
+          <div className="w-6 h-0.5 bg-primary mb-1.5" />
+          <div className="w-4 h-0.5 bg-primary" />
         </button>
       </div>
 
