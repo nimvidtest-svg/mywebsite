@@ -24,7 +24,7 @@ export function Navbar() {
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className={`fixed top-7 md:top-8 inset-x-0 z-50 transition-all duration-500 bg-primary/50 backdrop-blur-md ${
+      className={`fixed top-7 md:top-8 inset-x-0 z-50 transition-all duration-500 bg-primary/10 backdrop-blur-md ${
         scrolled ? "py-1" : "py-2"
       }`}
     >
