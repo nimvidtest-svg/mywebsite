@@ -182,7 +182,7 @@ export async function submitReview(r: { customer_name: string; rating: number; c
   if (error) throw error;
 }
 
-const DEFAULT_WA = "212600000000";
+const DEFAULT_WA = "212703839618";
 let cachedWa: string | null = null;
 
 export async function getWhatsappNumber(): Promise<string> {
