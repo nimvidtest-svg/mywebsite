@@ -50,7 +50,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.5 }}
             className="font-display text-3xl md:text-4xl text-gradient-gold mb-10"
           >
-            À partir de 50 DH seulement.
+            À partir de 79 DH seulement.
           </motion.p>
 
           <motion.div

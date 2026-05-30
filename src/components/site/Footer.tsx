@@ -19,7 +19,7 @@ export function Footer() {
           <div className="md:col-span-1">
             <img src={logo} alt="Unique Parfum" className="h-16 mb-4" style={{filter: "invert(1) sepia(1) saturate(5) hue-rotate(5deg) brightness(0.9)"}} />
             <p className="text-sm text-muted-foreground max-w-xs">
-              Maison de parfum marocaine. Des fragrances inspirées des plus grandes marques, à partir de 50 DH seulement.
+              Maison de parfum marocaine. Des fragrances inspirées des plus grandes marques, à partir de 79 DH seulement.
             </p>
           </div>
 

@@ -61,9 +61,9 @@ function ProductPage() {
 }
 
 const SIZES = [
-  { label: "50ml", price: 50 },
-  { label: "70ml", price: 70 },
-  { label: "100ml", price: 100 },
+  { label: "50ml", price: 79 },
+  { label: "70ml", price: 99 },
+  { label: "100ml", price: 149 },
 ];
 const STAR_RATING = 5;
 
