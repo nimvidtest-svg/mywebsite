@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
 import { ArrowLeft, Tag, User, Sparkles, Star, Minus, Plus, CheckCircle2, Truck } from "lucide-react";
-import { fetchPerfumes, createOrder, type Perfume } from "@/lib/api";
+import { fetchPerfumes, createOrder, type Perfume, DEFAULT_SIZES } from "@/lib/api";
 import { Navbar } from "@/components/site/Navbar";
 import { AnnouncementBar } from "@/components/site/AnnouncementBar";
 import { Footer } from "@/components/site/Footer";
@@ -60,14 +60,12 @@ function ProductPage() {
   );
 }
 
-const SIZES = [
-  { label: "50ml", price: 79 },
-  { label: "70ml", price: 99 },
-  { label: "100ml", price: 149 },
-];
+// fallback used only if product has no sizes set
+
 const STAR_RATING = 5;
 
 function ProductDetail({ perfume }: { perfume: Perfume }) {
+  const SIZES = perfume.sizes?.length ? perfume.sizes : DEFAULT_SIZES;
   const [qty, setQty] = useState(1);
   const [size, setSize] = useState(SIZES[0]);
   const [form, setForm] = useState({ name: "", address: "", phone: "", city: "" });

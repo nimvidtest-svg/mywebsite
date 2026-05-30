@@ -24,6 +24,17 @@ export const orderStatusLabel: Record<OrderStatus, string> = {
   nouveau: "Nouveau", confirme: "Confirmé", livre: "Livré", annule: "Annulé",
 };
 
+export interface PerfumeSize {
+  label: string;
+  price: number;
+}
+
+export const DEFAULT_SIZES: PerfumeSize[] = [
+  { label: "50ml", price: 79 },
+  { label: "70ml", price: 99 },
+  { label: "100ml", price: 149 },
+];
+
 export interface Perfume {
   id: string;
   name: string;
@@ -37,6 +48,7 @@ export interface Perfume {
   sort_order: number;
   scent: Scent;
   stock_status: StockStatus;
+  sizes?: PerfumeSize[];
 }
 
 export interface Review {

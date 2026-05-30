@@ -2,15 +2,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { fetchPerfumes, type Perfume, type Category, type Gender, type StockStatus, categories } from "@/lib/api";
+import { fetchPerfumes, type Perfume, type PerfumeSize, type Category, type Gender, type StockStatus, categories, DEFAULT_SIZES } from "@/lib/api";
 import { Plus, Pencil, Trash2, X, Loader2, Star, StarOff, Upload } from "lucide-react";
 
 export const Route = createFileRoute("/admin/perfumes")({ component: AdminPerfumes });
 
 const empty: Omit<Perfume, "id"> = {
   name: "", brand: "", category: "FEMMES", gender: "Femme",
-  price: 50, description: "", image_url: "", best_seller: false, sort_order: 0,
+  price: 79, description: "", image_url: "", best_seller: false, sort_order: 0,
   scent: "frais", stock_status: "in_stock",
+  sizes: [...DEFAULT_SIZES],
 };
 
 function AdminPerfumes() {
@@ -26,12 +27,14 @@ function AdminPerfumes() {
   const refresh = () => qc.invalidateQueries({ queryKey: ["perfumes"] });
 
   const save = async (data: Omit<Perfume, "id"> & { id?: string }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const payload: any = { ...data };
     if (data.id) {
-      const { id, ...rest } = data;
+      const { id, ...rest } = payload;
       const { error } = await supabase.from("perfumes").update(rest).eq("id", id);
       if (error) { alert(error.message); return; }
     } else {
-      const { id: _i, ...rest } = data;
+      const { id: _i, ...rest } = payload;
       void _i;
       const { error } = await supabase.from("perfumes").insert(rest);
       if (error) { alert(error.message); return; }
@@ -140,12 +143,38 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
         <div className="grid grid-cols-2 gap-3">
           <Input label="Nom" value={form.name} onChange={(v) => set("name", v)} />
           <Input label="Marque" value={form.brand} onChange={(v) => set("brand", v)} />
-          <Input label="Prix (DH)" type="number" value={String(form.price)} onChange={(v) => set("price", Number(v) || 0)} />
           <Select label="Stock" value={form.stock_status} onChange={(v) => set("stock_status", v as StockStatus)}
             options={["in_stock","low_stock","out_of_stock"]}
             labels={{ in_stock: "En stock", low_stock: "Stock limité", out_of_stock: "Rupture" }} />
           <Select label="Catégorie" value={form.category} onChange={(v) => set("category", v as Category)} options={categories} />
           <Select label="Genre" value={form.gender} onChange={(v) => set("gender", v as Gender)} options={["Femme", "Homme", "Mixte"]} />
+        </div>
+
+        {/* Tailles & Prix */}
+        <div>
+          <label className="text-xs tracking-[0.15em] text-primary uppercase mb-2 block">Tailles & Prix</label>
+          <div className="grid grid-cols-3 gap-3">
+            {(form.sizes ?? DEFAULT_SIZES).map((s, i) => (
+              <div key={s.label} className="flex flex-col gap-1">
+                <span className="text-xs text-muted-foreground text-center">{s.label}</span>
+                <div className="flex items-center gap-1 px-3 py-2 rounded-lg bg-noir border border-primary/20 focus-within:border-primary">
+                  <input
+                    type="number"
+                    min={0}
+                    value={s.price}
+                    onChange={(e) => {
+                      const updated = [...(form.sizes ?? DEFAULT_SIZES)];
+                      updated[i] = { ...updated[i], price: Number(e.target.value) || 0 };
+                      set("sizes", updated);
+                      if (i === 0) set("price", Number(e.target.value) || 0);
+                    }}
+                    className="w-full bg-transparent focus:outline-none text-sm"
+                  />
+                  <span className="text-xs text-muted-foreground">DH</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Image */}
