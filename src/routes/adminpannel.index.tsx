@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { type OrderRow, type OrderStatus, orderStatusLabel } from "@/lib/api";
 import { Package, ShoppingBag, Sparkles, Phone, MapPin, Bell } from "lucide-react";
 
-export const Route = createFileRoute("/admin/")({ component: Dashboard });
+export const Route = createFileRoute("/adminpannel/")({ component: Dashboard });
 
 function Dashboard() {
   const qc = useQueryClient();
@@ -40,7 +40,6 @@ function Dashboard() {
     },
   });
 
-  // Real-time: refresh queries when orders change
   useEffect(() => {
     const channel = supabase
       .channel("dashboard-orders-rt")
@@ -53,9 +52,9 @@ function Dashboard() {
   }, [qc]);
 
   const cards = [
-    { label: "Parfums", value: perfumeCount ?? "—", icon: Package, to: "/admin/perfumes", color: "text-primary" },
-    { label: "Total Commandes", value: orderStats?.total ?? "—", icon: ShoppingBag, to: "/admin/orders", color: "text-primary" },
-    { label: "Nouvelles Commandes", value: orderStats?.news ?? "—", icon: Sparkles, to: "/admin/orders", color: "text-red-400", live: true },
+    { label: "Parfums", value: perfumeCount ?? "—", icon: Package, to: "/adminpannel/perfumes", color: "text-primary" },
+    { label: "Total Commandes", value: orderStats?.total ?? "—", icon: ShoppingBag, to: "/adminpannel/orders", color: "text-primary" },
+    { label: "Nouvelles Commandes", value: orderStats?.news ?? "—", icon: Sparkles, to: "/adminpannel/orders", color: "text-red-400", live: true },
   ];
 
   return (
@@ -65,7 +64,6 @@ function Dashboard() {
         <p className="text-sm text-muted-foreground mt-1">Aperçu de votre boutique.</p>
       </div>
 
-      {/* Stat cards */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {cards.map((c) => (
           <Link key={c.label} to={c.to}
@@ -86,7 +84,6 @@ function Dashboard() {
         ))}
       </div>
 
-      {/* Live new orders list */}
       {newOrders.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -97,46 +94,33 @@ function Dashboard() {
               {newOrders.length} en attente
             </span>
           </div>
-
           <div className="space-y-2">
             {newOrders.map((o) => (
-              <Link key={o.id} to="/admin/orders"
+              <Link key={o.id} to="/adminpannel/orders"
                 className="glass rounded-xl p-4 border border-primary/20 hover:border-primary/50 transition flex flex-wrap items-start justify-between gap-3 group">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
                     <span className="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider bg-red-500/20 text-red-400">
                       {orderStatusLabel[o.status as OrderStatus] ?? o.status}
                     </span>
-                    <span className="text-[10px] text-muted-foreground">
-                      {new Date(o.created_at).toLocaleString("fr-FR")}
-                    </span>
+                    <span className="text-[10px] text-muted-foreground">{new Date(o.created_at).toLocaleString("fr-FR")}</span>
                   </div>
                   <p className="font-medium truncate">{o.customer_name}</p>
                   <div className="flex flex-wrap gap-3 text-xs text-muted-foreground mt-1">
-                    <span className="flex items-center gap-1">
-                      <Phone className="w-3 h-3" />{o.phone}
-                    </span>
+                    <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{o.phone}</span>
                     {(o.city || o.address) && (
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />{[o.address, o.city].filter(Boolean).join(", ")}
-                      </span>
+                      <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{[o.address, o.city].filter(Boolean).join(", ")}</span>
                     )}
                   </div>
                   <ul className="mt-1 text-xs text-foreground/70 space-y-0.5">
-                    {o.items.map((it, i) => (
-                      <li key={i}>· {it.name}{it.qty ? ` × ${it.qty}` : ""}</li>
-                    ))}
+                    {o.items.map((it, i) => (<li key={i}>· {it.name}{it.qty ? ` × ${it.qty}` : ""}</li>))}
                   </ul>
                 </div>
-                {o.total != null && (
-                  <span className="font-display text-lg text-gradient-gold shrink-0">{o.total} DH</span>
-                )}
+                {o.total != null && <span className="font-display text-lg text-gradient-gold shrink-0">{o.total} DH</span>}
               </Link>
             ))}
           </div>
-
-          <Link to="/admin/orders"
-            className="inline-flex items-center gap-2 text-xs text-primary hover:underline">
+          <Link to="/adminpannel/orders" className="inline-flex items-center gap-2 text-xs text-primary hover:underline">
             Voir toutes les commandes →
           </Link>
         </div>

@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fetchPerfumes, type Perfume, type PerfumeSize, type Category, type Gender, type StockStatus, categories, DEFAULT_SIZES } from "@/lib/api";
 import { Plus, Pencil, Trash2, X, Loader2, Star, StarOff, Upload } from "lucide-react";
 
-export const Route = createFileRoute("/admin/perfumes")({ component: AdminPerfumes });
+export const Route = createFileRoute("/adminpannel/perfumes")({ component: AdminPerfumes });
 
 const empty: Omit<Perfume, "id"> = {
   name: "", brand: "", category: "FEMMES", gender: "Femme",
@@ -112,9 +112,7 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
     try {
       const ext = file.name.split(".").pop() || "jpg";
       const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const { error } = await supabase.storage
-        .from("perfume-images")
-        .upload(path, file, { cacheControl: "31536000", upsert: false });
+      const { error } = await supabase.storage.from("perfume-images").upload(path, file, { cacheControl: "31536000", upsert: false });
       if (error) throw error;
       const { data: pub } = supabase.storage.from("perfume-images").getPublicUrl(path);
       set("image_url", pub.publicUrl);
@@ -150,26 +148,21 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
           <Select label="Genre" value={form.gender} onChange={(v) => set("gender", v as Gender)} options={["Femme", "Homme", "Mixte"]} />
         </div>
 
-        {/* Tailles & Prix */}
         <div>
           <label className="text-xs tracking-[0.15em] text-primary uppercase mb-2 block">Tailles & Prix</label>
           <div className="grid grid-cols-3 gap-3">
-            {(form.sizes ?? DEFAULT_SIZES).map((s, i) => (
+            {(form.sizes ?? DEFAULT_SIZES).map((s: PerfumeSize, i: number) => (
               <div key={s.label} className="flex flex-col gap-1">
                 <span className="text-xs text-muted-foreground text-center">{s.label}</span>
                 <div className="flex items-center gap-1 px-3 py-2 rounded-lg bg-noir border border-primary/20 focus-within:border-primary">
-                  <input
-                    type="number"
-                    min={0}
-                    value={s.price}
+                  <input type="number" min={0} value={s.price}
                     onChange={(e) => {
                       const updated = [...(form.sizes ?? DEFAULT_SIZES)];
                       updated[i] = { ...updated[i], price: Number(e.target.value) || 0 };
                       set("sizes", updated);
                       if (i === 0) set("price", Number(e.target.value) || 0);
                     }}
-                    className="w-full bg-transparent focus:outline-none text-sm"
-                  />
+                    className="w-full bg-transparent focus:outline-none text-sm" />
                   <span className="text-xs text-muted-foreground">DH</span>
                 </div>
               </div>
@@ -177,7 +170,6 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
           </div>
         </div>
 
-        {/* Image */}
         <div>
           <label className="text-xs tracking-[0.15em] text-primary uppercase mb-1.5 block">Image</label>
           <div className="flex gap-3 items-center">
