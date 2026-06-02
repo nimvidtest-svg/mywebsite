@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, Link, useNavigate, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Outlet, Link, useNavigate, useLocation, redirect } from "@tanstack/react-router";
 import { isLoggedIn, logout } from "@/lib/auth";
 import { LogOut, Package, ShoppingBag, LayoutDashboard, Bell } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -7,6 +7,11 @@ import { playNewOrder, unlockAudio } from "@/lib/sounds";
 
 export const Route = createFileRoute("/adminpannel")({
   component: AdminLayout,
+  beforeLoad: () => {
+    if (typeof window !== "undefined" && !isLoggedIn()) {
+      throw redirect({ to: "/admin" });
+    }
+  },
   head: () => ({ meta: [{ title: "Admin · Unique Parfum" }, { name: "robots", content: "noindex" }] }),
 });
 

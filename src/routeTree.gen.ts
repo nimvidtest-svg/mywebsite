@@ -10,23 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ParfumeurRouteImport } from './routes/parfumeur'
-import { Route as LoginRouteImport } from './routes/login'
+import { Route as AdminpannelRouteImport } from './routes/adminpannel'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminpannelIndexRouteImport } from './routes/adminpannel.index'
 import { Route as ParfumIdRouteImport } from './routes/parfum.$id'
-import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
-import { Route as AdminPerfumesRouteImport } from './routes/admin.perfumes'
-import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminpannelPerfumesRouteImport } from './routes/adminpannel.perfumes'
+import { Route as AdminpannelOrdersRouteImport } from './routes/adminpannel.orders'
 
 const ParfumeurRoute = ParfumeurRouteImport.update({
   id: '/parfumeur',
   path: '/parfumeur',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const AdminpannelRoute = AdminpannelRouteImport.update({
+  id: '/adminpannel',
+  path: '/adminpannel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -39,104 +38,93 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
+const AdminpannelIndexRoute = AdminpannelIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => AdminpannelRoute,
 } as any)
 const ParfumIdRoute = ParfumIdRouteImport.update({
   id: '/parfum/$id',
   path: '/parfum/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPerfumesRoute = AdminPerfumesRouteImport.update({
+const AdminpannelPerfumesRoute = AdminpannelPerfumesRouteImport.update({
   id: '/perfumes',
   path: '/perfumes',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => AdminpannelRoute,
 } as any)
-const AdminOrdersRoute = AdminOrdersRouteImport.update({
+const AdminpannelOrdersRoute = AdminpannelOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => AdminpannelRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
-  '/login': typeof LoginRoute
+  '/admin': typeof AdminRoute
+  '/adminpannel': typeof AdminpannelRouteWithChildren
   '/parfumeur': typeof ParfumeurRoute
-  '/admin/orders': typeof AdminOrdersRoute
-  '/admin/perfumes': typeof AdminPerfumesRoute
-  '/admin/settings': typeof AdminSettingsRoute
+  '/adminpannel/orders': typeof AdminpannelOrdersRoute
+  '/adminpannel/perfumes': typeof AdminpannelPerfumesRoute
   '/parfum/$id': typeof ParfumIdRoute
-  '/admin/': typeof AdminIndexRoute
+  '/adminpannel/': typeof AdminpannelIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
+  '/admin': typeof AdminRoute
   '/parfumeur': typeof ParfumeurRoute
-  '/admin/orders': typeof AdminOrdersRoute
-  '/admin/perfumes': typeof AdminPerfumesRoute
-  '/admin/settings': typeof AdminSettingsRoute
+  '/adminpannel/orders': typeof AdminpannelOrdersRoute
+  '/adminpannel/perfumes': typeof AdminpannelPerfumesRoute
   '/parfum/$id': typeof ParfumIdRoute
-  '/admin': typeof AdminIndexRoute
+  '/adminpannel': typeof AdminpannelIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
-  '/login': typeof LoginRoute
+  '/admin': typeof AdminRoute
+  '/adminpannel': typeof AdminpannelRouteWithChildren
   '/parfumeur': typeof ParfumeurRoute
-  '/admin/orders': typeof AdminOrdersRoute
-  '/admin/perfumes': typeof AdminPerfumesRoute
-  '/admin/settings': typeof AdminSettingsRoute
+  '/adminpannel/orders': typeof AdminpannelOrdersRoute
+  '/adminpannel/perfumes': typeof AdminpannelPerfumesRoute
   '/parfum/$id': typeof ParfumIdRoute
-  '/admin/': typeof AdminIndexRoute
+  '/adminpannel/': typeof AdminpannelIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
-    | '/login'
+    | '/adminpannel'
     | '/parfumeur'
-    | '/admin/orders'
-    | '/admin/perfumes'
-    | '/admin/settings'
+    | '/adminpannel/orders'
+    | '/adminpannel/perfumes'
     | '/parfum/$id'
-    | '/admin/'
+    | '/adminpannel/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/login'
-    | '/parfumeur'
-    | '/admin/orders'
-    | '/admin/perfumes'
-    | '/admin/settings'
-    | '/parfum/$id'
     | '/admin'
+    | '/parfumeur'
+    | '/adminpannel/orders'
+    | '/adminpannel/perfumes'
+    | '/parfum/$id'
+    | '/adminpannel'
   id:
     | '__root__'
     | '/'
     | '/admin'
-    | '/login'
+    | '/adminpannel'
     | '/parfumeur'
-    | '/admin/orders'
-    | '/admin/perfumes'
-    | '/admin/settings'
+    | '/adminpannel/orders'
+    | '/adminpannel/perfumes'
     | '/parfum/$id'
-    | '/admin/'
+    | '/adminpannel/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRouteWithChildren
-  LoginRoute: typeof LoginRoute
+  AdminRoute: typeof AdminRoute
+  AdminpannelRoute: typeof AdminpannelRouteWithChildren
   ParfumeurRoute: typeof ParfumeurRoute
   ParfumIdRoute: typeof ParfumIdRoute
 }
@@ -150,11 +138,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ParfumeurRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/adminpannel': {
+      id: '/adminpannel'
+      path: '/adminpannel'
+      fullPath: '/adminpannel'
+      preLoaderRoute: typeof AdminpannelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -171,12 +159,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/': {
-      id: '/admin/'
+    '/adminpannel/': {
+      id: '/adminpannel/'
       path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/adminpannel/'
+      preLoaderRoute: typeof AdminpannelIndexRouteImport
+      parentRoute: typeof AdminpannelRoute
     }
     '/parfum/$id': {
       id: '/parfum/$id'
@@ -185,50 +173,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ParfumIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/settings': {
-      id: '/admin/settings'
-      path: '/settings'
-      fullPath: '/admin/settings'
-      preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/perfumes': {
-      id: '/admin/perfumes'
+    '/adminpannel/perfumes': {
+      id: '/adminpannel/perfumes'
       path: '/perfumes'
-      fullPath: '/admin/perfumes'
-      preLoaderRoute: typeof AdminPerfumesRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/adminpannel/perfumes'
+      preLoaderRoute: typeof AdminpannelPerfumesRouteImport
+      parentRoute: typeof AdminpannelRoute
     }
-    '/admin/orders': {
-      id: '/admin/orders'
+    '/adminpannel/orders': {
+      id: '/adminpannel/orders'
       path: '/orders'
-      fullPath: '/admin/orders'
-      preLoaderRoute: typeof AdminOrdersRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/adminpannel/orders'
+      preLoaderRoute: typeof AdminpannelOrdersRouteImport
+      parentRoute: typeof AdminpannelRoute
     }
   }
 }
 
-interface AdminRouteChildren {
-  AdminOrdersRoute: typeof AdminOrdersRoute
-  AdminPerfumesRoute: typeof AdminPerfumesRoute
-  AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminIndexRoute: typeof AdminIndexRoute
+interface AdminpannelRouteChildren {
+  AdminpannelOrdersRoute: typeof AdminpannelOrdersRoute
+  AdminpannelPerfumesRoute: typeof AdminpannelPerfumesRoute
+  AdminpannelIndexRoute: typeof AdminpannelIndexRoute
 }
 
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminOrdersRoute: AdminOrdersRoute,
-  AdminPerfumesRoute: AdminPerfumesRoute,
-  AdminSettingsRoute: AdminSettingsRoute,
-  AdminIndexRoute: AdminIndexRoute,
+const AdminpannelRouteChildren: AdminpannelRouteChildren = {
+  AdminpannelOrdersRoute: AdminpannelOrdersRoute,
+  AdminpannelPerfumesRoute: AdminpannelPerfumesRoute,
+  AdminpannelIndexRoute: AdminpannelIndexRoute,
 }
 
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+const AdminpannelRouteWithChildren = AdminpannelRoute._addFileChildren(
+  AdminpannelRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRouteWithChildren,
-  LoginRoute: LoginRoute,
+  AdminRoute: AdminRoute,
+  AdminpannelRoute: AdminpannelRouteWithChildren,
   ParfumeurRoute: ParfumeurRoute,
   ParfumIdRoute: ParfumIdRoute,
 }
