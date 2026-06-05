@@ -44,7 +44,7 @@ export function Navbar() {
             transition={{ duration: 0.3 }}
             className="flex items-baseline gap-1.5 font-display tracking-wider pointer-events-none"
           >
-            <span className="text-sm sm:text-xl text-gradient-gold">Unique Parfum</span>
+            <span className="hidden sm:inline text-xl text-gradient-gold">Unique Parfum</span>
             <span className="text-xs sm:text-base text-primary/80 italic">— Salé</span>
           </motion.span>
         </a>
