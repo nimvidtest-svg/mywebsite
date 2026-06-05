@@ -42,7 +42,7 @@ export function Footer() {
             <h4 className="text-xs tracking-[0.3em] uppercase text-primary mb-4">Contact</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-center gap-3"><MessageCircle className="w-4 h-4 text-primary flex-shrink-0"/>06 34 24 11 21</li>
-              <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-primary flex-shrink-0"/>contact@uniqueparfum.ma</li>
+              <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-primary flex-shrink-0"/>contact@theuniqueparfum.com</li>
               <li className="flex items-start gap-3"><MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5"/>Salé, Maroc · Livraison nationale</li>
             </ul>
           </div>
