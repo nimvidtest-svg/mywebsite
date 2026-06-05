@@ -293,14 +293,6 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
             </>
           )}
 
-          {/* Composition */}
-          <div className="mt-6 pt-6 border-t border-primary/15">
-            <h3 className="text-sm font-medium tracking-widest uppercase text-primary mb-3">Composition</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Alcool denat., Parfum (Fragrance), Aqua (Water), Benzyl Benzoate, Linalool, Citronellol, Geraniol,
-              Limonene, Eugenol, Benzyl Salicylate, Coumarin.
-            </p>
-          </div>
         </div>
       </motion.div>
     </>
