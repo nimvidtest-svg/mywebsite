@@ -42,10 +42,10 @@ export function Navbar() {
           <motion.span
             animate={{ opacity: scrolled ? 0 : 1, x: scrolled ? -8 : 0 }}
             transition={{ duration: 0.3 }}
-            className="hidden sm:flex items-baseline gap-2 font-display tracking-wider pointer-events-none"
+            className="flex items-baseline gap-1.5 font-display tracking-wider pointer-events-none"
           >
-            <span className="text-xl text-gradient-gold">Unique Parfum</span>
-            <span className="text-base text-primary/80 italic">— Salé</span>
+            <span className="text-sm sm:text-xl text-gradient-gold">Unique Parfum</span>
+            <span className="text-xs sm:text-base text-primary/80 italic">— Salé</span>
           </motion.span>
         </a>
 
