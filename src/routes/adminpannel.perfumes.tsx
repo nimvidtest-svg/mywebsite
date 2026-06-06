@@ -19,6 +19,7 @@ function AdminPerfumes() {
   const { data: perfumes = [], isLoading } = useQuery({ queryKey: ["perfumes"], queryFn: fetchPerfumes });
   const [editing, setEditing] = useState<(Omit<Perfume, "id"> & { id?: string }) | null>(null);
   const [filter, setFilter] = useState("");
+  const [bulkOpen, setBulkOpen] = useState(false);
 
   const list = perfumes.filter((p) =>
     !filter || p.name.toLowerCase().includes(filter.toLowerCase()) || p.brand.toLowerCase().includes(filter.toLowerCase())
@@ -59,10 +60,16 @@ function AdminPerfumes() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-3xl">Parfums <span className="text-muted-foreground text-base">({perfumes.length})</span></h1>
-        <button onClick={() => setEditing({ ...empty })}
-          className="px-4 py-2 rounded-full bg-gradient-gold text-primary-foreground text-sm flex items-center gap-2 shadow-gold">
-          <Plus className="w-4 h-4" /> Ajouter un parfum
-        </button>
+        <div className="flex gap-2">
+          <button onClick={() => setBulkOpen(true)}
+            className="px-4 py-2 rounded-full glass border border-primary/30 text-primary text-sm flex items-center gap-2 hover:bg-primary/10 transition">
+            Modifier tous les prix
+          </button>
+          <button onClick={() => setEditing({ ...empty })}
+            className="px-4 py-2 rounded-full bg-gradient-gold text-primary-foreground text-sm flex items-center gap-2 shadow-gold">
+            <Plus className="w-4 h-4" /> Ajouter un parfum
+          </button>
+        </div>
       </div>
       <input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Rechercher..."
         className="w-full md:max-w-sm px-4 py-2 rounded-full bg-noir border border-primary/20 text-sm focus:outline-none focus:border-primary" />
@@ -96,6 +103,59 @@ function AdminPerfumes() {
       )}
 
       {editing && <PerfumeEditor data={editing} onClose={() => setEditing(null)} onSave={save} />}
+      {bulkOpen && <BulkPriceModal onClose={() => setBulkOpen(false)} onDone={() => { setBulkOpen(false); refresh(); }} />}
+    </div>
+  );
+}
+
+function BulkPriceModal({ onClose, onDone }: { onClose: () => void; onDone: () => void }) {
+  const [prices, setPrices] = useState([
+    { label: "50ml", price: 79 },
+    { label: "70ml", price: 99 },
+    { label: "100ml", price: 149 },
+  ]);
+  const [saving, setSaving] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await supabase.from("perfumes").update({ price: prices[0].price, sizes: prices as any }).not("id", "is", null);
+      if (error) { alert(error.message); return; }
+      onDone();
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
+      <form onSubmit={submit} onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-sm bg-background border border-primary/30 rounded-3xl p-6 space-y-4 shadow-gold">
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-xl">Modifier tous les prix</h2>
+          <button type="button" onClick={onClose} className="w-8 h-8 rounded-full glass flex items-center justify-center"><X className="w-4 h-4" /></button>
+        </div>
+        <p className="text-xs text-muted-foreground">Applique ces prix à tous les parfums.</p>
+        <div className="space-y-3">
+          {prices.map((s, i) => (
+            <div key={s.label} className="flex items-center gap-3">
+              <span className="text-sm text-primary w-12">{s.label}</span>
+              <div className="flex-1 flex items-center gap-1 px-3 py-2 rounded-lg bg-noir border border-primary/20 focus-within:border-primary">
+                <input type="number" min={0} value={s.price}
+                  onChange={(e) => setPrices((prev) => prev.map((p, j) => j === i ? { ...p, price: Number(e.target.value) || 0 } : p))}
+                  className="w-full bg-transparent focus:outline-none text-sm" />
+                <span className="text-xs text-muted-foreground">DH</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button type="submit" disabled={saving}
+          className="w-full py-3 rounded-full bg-gradient-gold text-primary-foreground font-medium shadow-gold disabled:opacity-50 flex items-center justify-center gap-2">
+          {saving && <Loader2 className="w-4 h-4 animate-spin" />} Appliquer à tous
+        </button>
+      </form>
     </div>
   );
 }

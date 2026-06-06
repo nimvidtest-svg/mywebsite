@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
 import { ArrowLeft, Tag, User, Sparkles, Star, Minus, Plus, CheckCircle2, Truck } from "lucide-react";
 import { fetchPerfumes, createOrder, type Perfume, DEFAULT_SIZES } from "@/lib/api";
+import { openWhatsapp } from "@/lib/whatsapp";
 import { Navbar } from "@/components/site/Navbar";
 import { AnnouncementBar } from "@/components/site/AnnouncementBar";
 import { Footer } from "@/components/site/Footer";
@@ -92,6 +93,8 @@ function ProductDetail({ perfume }: { perfume: Perfume }) {
       type: "standard",
       notes: `Taille: ${size.label}`,
     }).catch(() => {});
+    const msg = `Bonjour, je voudrais commander :\n- ${perfume.name} · ${size.label} · ${qty} unité(s) · ${totalPrice} DH\n\nNom : ${form.name}\nTél : ${form.phone}\nVille : ${form.city}\nAdresse : ${form.address}`;
+    openWhatsapp(msg);
     setSubmitted(true);
   };
 
@@ -338,7 +341,7 @@ function RelatedProducts({ perfumes }: { perfumes: Perfume[] }) {
             <div className="p-4">
               <p className="text-[10px] text-primary/70 uppercase tracking-widest mb-0.5">{p.brand}</p>
               <p className="font-display text-lg leading-tight">{p.name}</p>
-              <p className="text-sm text-muted-foreground mt-1">{p.price} DH</p>
+              <p className="text-sm text-muted-foreground mt-1">50ml · {p.price} DH</p>
             </div>
           </Link>
         ))}

@@ -81,7 +81,7 @@ export function BestSellers() {
                   )}
                 </div>
                 <div className="absolute top-4 right-4 z-10 glass-gold text-primary text-xs tracking-wider px-3 py-1 rounded-full font-semibold">
-                  {p.price} DH
+                  50ml · {p.price} DH
                 </div>
 
                 <Link to="/parfum/$id" params={{ id: p.id }} className="relative bg-black h-[220px] md:h-[260px] flex items-center justify-center overflow-hidden">

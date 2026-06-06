@@ -71,7 +71,6 @@ function AdminLayout() {
   const links = [
     { to: "/adminpannel",          label: "Dashboard",  icon: LayoutDashboard, exact: true },
     { to: "/adminpannel/perfumes", label: "Parfums",     icon: Package },
-    { to: "/adminpannel/orders",   label: "Commandes",   icon: ShoppingBag, badge: newCount },
   ];
 
   return (
