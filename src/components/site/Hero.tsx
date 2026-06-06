@@ -1,9 +1,14 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import bottle from "@/assets/hero-bottle.png";
 import { Sparkles, Truck, Heart } from "lucide-react";
+import { fetchPerfumes } from "@/lib/api";
 
 export function Hero() {
+  const { data: perfumes = [] } = useQuery({ queryKey: ["perfumes"], queryFn: fetchPerfumes });
+  const minPrice = perfumes.length ? Math.min(...perfumes.map((p) => p.price)) : 79;
+
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const rx = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]), { stiffness: 60, damping: 18 });
@@ -50,7 +55,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.5 }}
             className="font-display text-3xl md:text-4xl text-gradient-gold mb-10"
           >
-            À partir de 79 DH seulement.
+            À partir de {minPrice} DH seulement.
           </motion.p>
 
           <motion.div

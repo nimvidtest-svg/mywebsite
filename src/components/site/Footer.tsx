@@ -1,5 +1,7 @@
 import { Instagram, MessageCircle, Music2, Mail, MapPin } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPerfumes } from "@/lib/api";
 
 const NAV_LINKS = [
   { label: "Accueil", href: "#top" },
@@ -11,6 +13,9 @@ const NAV_LINKS = [
 ];
 
 export function Footer() {
+  const { data: perfumes = [] } = useQuery({ queryKey: ["perfumes"], queryFn: fetchPerfumes });
+  const minPrice = perfumes.length ? Math.min(...perfumes.map((p) => p.price)) : 79;
+
   return (
     <footer className="relative border-t border-primary/15 pt-16 pb-8 mt-12">
       <div className="container mx-auto px-6">
@@ -19,7 +24,7 @@ export function Footer() {
           <div className="md:col-span-1">
             <img src={logo} alt="Unique Parfum" className="h-16 mb-4" style={{filter: "invert(1) sepia(1) saturate(5) hue-rotate(5deg) brightness(0.9)"}} />
             <p className="text-sm text-muted-foreground max-w-xs">
-              Maison de parfum marocaine. Des fragrances inspirées des plus grandes marques, à partir de 79 DH seulement.
+              Maison de parfum marocaine. Des fragrances inspirées des plus grandes marques, à partir de {minPrice} DH seulement.
             </p>
           </div>
 
