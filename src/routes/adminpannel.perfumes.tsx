@@ -120,7 +120,8 @@ function BulkPriceModal({ onClose, onDone }: { onClose: () => void; onDone: () =
     try {
       const sizes = BULK_LABELS.map((label, i) => ({ label, price: Number(strs[i]) || 0 }));
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await supabase.from("perfumes").update({ price: sizes[0].price, sizes: sizes as any }).not("id", "is", null);
+      const payload: any = { price: sizes[0].price, sizes };
+      const { error } = await supabase.from("perfumes").update(payload).not("id", "is", null);
       if (error) { alert(error.message); return; }
       onDone();
     } finally {
@@ -142,7 +143,7 @@ function BulkPriceModal({ onClose, onDone }: { onClose: () => void; onDone: () =
             <div key={label} className="flex items-center gap-3">
               <span className="text-sm text-primary w-12">{label}</span>
               <div className="flex-1 flex items-center gap-1 px-3 py-2 rounded-lg bg-noir border border-primary/20 focus-within:border-primary">
-                <input type="text" inputMode="numeric" value={strs[i]}
+                <input type="number" min="1" required value={strs[i]}
                   onChange={(e) => setStrs((prev) => prev.map((v, j) => j === i ? e.target.value : v))}
                   className="w-full bg-transparent focus:outline-none text-sm" />
                 <span className="text-xs text-muted-foreground">DH</span>
@@ -215,7 +216,7 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
               <div key={s.label} className="flex flex-col gap-1">
                 <span className="text-xs text-muted-foreground text-center">{s.label}</span>
                 <div className="flex items-center gap-1 px-3 py-2 rounded-lg bg-noir border border-primary/20 focus-within:border-primary">
-                  <input type="text" inputMode="numeric" value={sizeStrs[i]}
+                  <input type="number" min="1" required value={sizeStrs[i]}
                     onChange={(e) => {
                       const val = e.target.value;
                       setSizeStrs((prev) => prev.map((v, j) => j === i ? val : v));
