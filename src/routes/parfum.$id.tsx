@@ -341,7 +341,7 @@ function RelatedProducts({ perfumes }: { perfumes: Perfume[] }) {
             <div className="p-4">
               <p className="text-[10px] text-primary/70 uppercase tracking-widest mb-0.5">{p.brand}</p>
               <p className="font-display text-lg leading-tight">{p.name}</p>
-              <p className="text-sm text-muted-foreground mt-1">50ml · {p.price} DH</p>
+              <p className="text-sm text-muted-foreground mt-1">{p.price} DH</p>
             </div>
           </Link>
         ))}

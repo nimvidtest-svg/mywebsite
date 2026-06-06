@@ -30,7 +30,7 @@ export function PerfumeCard({ perfume }: { perfume: Perfume }) {
         )}
       </div>
       <div className="absolute top-4 right-4 z-10 glass-gold text-primary text-xs tracking-wider px-3 py-1 rounded-full font-semibold">
-        50ml · {perfume.price} DH
+        {perfume.price} DH
       </div>
 
       <Link

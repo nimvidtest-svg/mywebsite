@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Truck, Gift, Sparkles, Check, X, CheckCircle2 } from "lucide-react";
 import offerImg from "@/assets/offer-3parfums.jpeg";
 import { fetchPerfumes, fetchSetting, createOrder, type OfferSettings } from "@/lib/api";
+import { openWhatsapp } from "@/lib/whatsapp";
 
 export function SpecialOffer() {
   const [open, setOpen] = useState(false);
@@ -50,6 +51,8 @@ export function SpecialOffer() {
         items: [{ name: p1 }, { name: p2 }, { name: p3 }],
         total: o.price, type: "offer_3", notes: "Offre 199 DH · testeur inclus",
       });
+      const msg = `Bonjour, je voudrais l'offre 3 parfums :\n1. ${p1}\n2. ${p2}\n3. ${p3}\nTotal : ${o.price} DH\n\nNom : ${customer_name}\nTél : ${tel}\nVille : ${ville}\nAdresse : ${adresse}`;
+      openWhatsapp(msg);
     } catch (err) { console.error(err); }
     setSubmitted(true);
   };

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { fetchPerfumes, createOrder } from "@/lib/api";
+import { openWhatsapp } from "@/lib/whatsapp";
 
 const baseSchema = z.object({
   prenom:    z.string().trim().min(2).max(50),
@@ -55,6 +56,9 @@ export function OrderForm() {
         total: found ? found.price * d.quantite : null,
         type: "standard", notes: null,
       });
+      const total = found ? found.price * d.quantite : null;
+      const msg = `Bonjour, je voudrais commander :\n- ${d.parfum} × ${d.quantite}${total ? ` · ${total} DH` : ""}\n\nNom : ${customer_name}\nTél : ${d.telephone}\nVille : ${d.ville}\nAdresse : ${d.adresse}`;
+      openWhatsapp(msg);
       setSubmitted(true);
     } catch (err) {
       alert("Erreur : " + (err instanceof Error ? err.message : String(err)));
