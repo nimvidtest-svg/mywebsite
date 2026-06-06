@@ -108,20 +108,19 @@ function AdminPerfumes() {
   );
 }
 
+const BULK_LABELS = ["50ml", "70ml", "100ml"];
+
 function BulkPriceModal({ onClose, onDone }: { onClose: () => void; onDone: () => void }) {
-  const [prices, setPrices] = useState([
-    { label: "50ml", price: 79 },
-    { label: "70ml", price: 99 },
-    { label: "100ml", price: 149 },
-  ]);
+  const [strs, setStrs] = useState(["79", "99", "149"]);
   const [saving, setSaving] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     try {
+      const sizes = BULK_LABELS.map((label, i) => ({ label, price: Number(strs[i]) || 0 }));
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await supabase.from("perfumes").update({ price: prices[0].price, sizes: prices as any }).not("id", "is", null);
+      const { error } = await supabase.from("perfumes").update({ price: sizes[0].price, sizes: sizes as any }).not("id", "is", null);
       if (error) { alert(error.message); return; }
       onDone();
     } finally {
@@ -139,12 +138,12 @@ function BulkPriceModal({ onClose, onDone }: { onClose: () => void; onDone: () =
         </div>
         <p className="text-xs text-muted-foreground">Applique ces prix à tous les parfums.</p>
         <div className="space-y-3">
-          {prices.map((s, i) => (
-            <div key={s.label} className="flex items-center gap-3">
-              <span className="text-sm text-primary w-12">{s.label}</span>
+          {BULK_LABELS.map((label, i) => (
+            <div key={label} className="flex items-center gap-3">
+              <span className="text-sm text-primary w-12">{label}</span>
               <div className="flex-1 flex items-center gap-1 px-3 py-2 rounded-lg bg-noir border border-primary/20 focus-within:border-primary">
-                <input type="number" min={0} value={s.price}
-                  onChange={(e) => setPrices((prev) => prev.map((p, j) => j === i ? { ...p, price: Number(e.target.value) || 0 } : p))}
+                <input type="text" inputMode="numeric" value={strs[i]}
+                  onChange={(e) => setStrs((prev) => prev.map((v, j) => j === i ? e.target.value : v))}
                   className="w-full bg-transparent focus:outline-none text-sm" />
                 <span className="text-xs text-muted-foreground">DH</span>
               </div>
@@ -162,6 +161,7 @@ function BulkPriceModal({ onClose, onDone }: { onClose: () => void; onDone: () =
 
 function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & { id?: string }; onClose: () => void; onSave: (d: Omit<Perfume, "id"> & { id?: string }) => Promise<void> }) {
   const [form, setForm] = useState(data);
+  const [sizeStrs, setSizeStrs] = useState(() => (data.sizes ?? DEFAULT_SIZES).map((s) => String(s.price)));
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -215,12 +215,15 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
               <div key={s.label} className="flex flex-col gap-1">
                 <span className="text-xs text-muted-foreground text-center">{s.label}</span>
                 <div className="flex items-center gap-1 px-3 py-2 rounded-lg bg-noir border border-primary/20 focus-within:border-primary">
-                  <input type="number" min={0} value={s.price}
+                  <input type="text" inputMode="numeric" value={sizeStrs[i]}
                     onChange={(e) => {
+                      const val = e.target.value;
+                      setSizeStrs((prev) => prev.map((v, j) => j === i ? val : v));
+                      const num = Number(val) || 0;
                       const updated = [...(form.sizes ?? DEFAULT_SIZES)];
-                      updated[i] = { ...updated[i], price: Number(e.target.value) || 0 };
+                      updated[i] = { ...updated[i], price: num };
                       set("sizes", updated);
-                      if (i === 0) set("price", Number(e.target.value) || 0);
+                      if (i === 0) set("price", num);
                     }}
                     className="w-full bg-transparent focus:outline-none text-sm" />
                   <span className="text-xs text-muted-foreground">DH</span>
