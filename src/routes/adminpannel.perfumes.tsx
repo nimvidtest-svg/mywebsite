@@ -3,15 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchPerfumes, type Perfume, type PerfumeSize, type Category, type Gender, type StockStatus, categories, DEFAULT_SIZES } from "@/lib/api";
-import { Plus, Pencil, Trash2, X, Loader2, Star, StarOff, Upload, Sparkles } from "lucide-react";
-
-function generateAIImage(perfume: { name: string; brand: string; scent: string; gender: string }): string {
-  const prompt = encodeURIComponent(
-    `luxury perfume bottle, ${perfume.name} by ${perfume.brand}, ${perfume.gender} fragrance, ${perfume.scent} scent, professional product photography, pure white background, studio lighting, photorealistic, high-end luxury glass bottle`
-  );
-  const seed = Math.floor(Math.random() * 999999);
-  return `https://image.pollinations.ai/prompt/${prompt}?width=512&height=512&nologo=true&seed=${seed}&model=turbo`;
-}
+import { Plus, Pencil, Trash2, X, Loader2, Star, StarOff, Upload } from "lucide-react";
 
 export const Route = createFileRoute("/adminpannel/perfumes")({ component: AdminPerfumes });
 
@@ -28,49 +20,11 @@ function AdminPerfumes() {
   const [editing, setEditing] = useState<(Omit<Perfume, "id"> & { id?: string }) | null>(null);
   const [filter, setFilter] = useState("");
   const [bulkOpen, setBulkOpen] = useState(false);
-  const [generating, setGenerating] = useState<Set<string>>(new Set());
-  const [generatingAll, setGeneratingAll] = useState(false);
-  const [genProgress, setGenProgress] = useState({ done: 0, total: 0 });
-
   const list = perfumes.filter((p) =>
     !filter || p.name.toLowerCase().includes(filter.toLowerCase()) || p.brand.toLowerCase().includes(filter.toLowerCase())
   );
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["perfumes"] });
-
-  const generateImage = async (p: Perfume) => {
-    setGenerating((prev) => new Set(prev).add(p.id));
-    try {
-      const url = generateAIImage(p);
-      await supabase.from("perfumes").update({ image_url: url }).eq("id", p.id);
-      refresh();
-    } catch (e) {
-      alert(e instanceof Error ? e.message : "Erreur de génération");
-    } finally {
-      setGenerating((prev) => { const s = new Set(prev); s.delete(p.id); return s; });
-    }
-  };
-
-  const generateAllImages = async () => {
-    const targets = perfumes.filter((p) => !p.image_url);
-    if (!targets.length) { alert("Tous les parfums ont déjà une image."); return; }
-    if (!confirm(`Générer des images pour ${targets.length} parfum(s) sans image ?`)) return;
-    setGeneratingAll(true);
-    setGenProgress({ done: 0, total: targets.length });
-    try {
-      for (const p of targets) {
-        try {
-          const url = generateAIImage(p);
-          await supabase.from("perfumes").update({ image_url: url }).eq("id", p.id);
-        } catch { /* skip and continue */ }
-        setGenProgress((prev) => ({ ...prev, done: prev.done + 1 }));
-      }
-      refresh();
-    } finally {
-      setGeneratingAll(false);
-      setGenProgress({ done: 0, total: 0 });
-    }
-  };
 
   const save = async (data: Omit<Perfume, "id"> & { id?: string }) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,10 +60,6 @@ function AdminPerfumes() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-3xl">Parfums <span className="text-muted-foreground text-base">({perfumes.length})</span></h1>
         <div className="flex flex-wrap gap-2">
-          <button onClick={generateAllImages} disabled={generatingAll}
-            className="px-4 py-2 rounded-full glass border border-primary/30 text-primary text-sm flex items-center gap-2 hover:bg-primary/10 transition disabled:opacity-50">
-            {generatingAll ? <><Loader2 className="w-4 h-4 animate-spin" />{genProgress.done}/{genProgress.total}</> : <><Sparkles className="w-4 h-4" />Générer toutes les images</>}
-          </button>
           <button onClick={() => setBulkOpen(true)}
             className="px-4 py-2 rounded-full glass border border-primary/30 text-primary text-sm flex items-center gap-2 hover:bg-primary/10 transition">
             Modifier tous les prix
@@ -140,10 +90,6 @@ function AdminPerfumes() {
                     <button onClick={() => toggleBest(p)} title="Best seller"
                       className={`w-8 h-8 rounded-full flex items-center justify-center transition ${p.best_seller ? "bg-gradient-gold text-primary-foreground" : "glass text-foreground/60 hover:text-primary"}`}>
                       {p.best_seller ? <Star className="w-3.5 h-3.5" /> : <StarOff className="w-3.5 h-3.5" />}
-                    </button>
-                    <button onClick={() => generateImage(p)} disabled={generating.has(p.id)} title="Générer image AI"
-                      className="w-8 h-8 rounded-full glass flex items-center justify-center hover:text-primary disabled:opacity-50">
-                      {generating.has(p.id) ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
                     </button>
                     <button onClick={() => setEditing(p)} className="w-8 h-8 rounded-full glass flex items-center justify-center hover:text-primary"><Pencil className="w-3.5 h-3.5" /></button>
                     <button onClick={() => remove(p.id)} className="w-8 h-8 rounded-full glass flex items-center justify-center hover:text-destructive"><Trash2 className="w-3.5 h-3.5" /></button>
@@ -218,15 +164,8 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
   const [sizeStrs, setSizeStrs] = useState(() => (data.sizes ?? DEFAULT_SIZES).map((s) => String(s.price)));
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [imageLoading, setImageLoading] = useState(false);
 
   const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) => setForm((f) => ({ ...f, [k]: v }));
-
-  const generateInEditor = () => {
-    if (!form.name) { alert("Entrez d'abord un nom de parfum."); return; }
-    set("image_url", generateAIImage(form));
-    setImageLoading(true);
-  };
 
   const upload = async (file: File) => {
     setUploading(true);
@@ -297,33 +236,15 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
         <div>
           <label className="text-xs tracking-[0.15em] text-primary uppercase mb-1.5 block">Image</label>
           <div className="flex gap-3 items-center">
-            {(form.image_url || imageLoading) && (
-              <div className="relative h-20 w-20 shrink-0">
-                <img src={form.image_url} alt="" className="h-20 w-20 object-contain rounded-lg bg-noir border border-primary/20"
-                  onLoad={() => setImageLoading(false)} onError={() => setImageLoading(false)} />
-                {imageLoading && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-noir/90 rounded-lg border border-primary/20">
-                    <Loader2 className="w-5 h-5 animate-spin text-primary" />
-                    <span className="text-[9px] text-primary/70">Génération...</span>
-                  </div>
-                )}
-              </div>
-            )}
+            {form.image_url && <img src={form.image_url} alt="" className="h-20 w-20 object-contain rounded-lg bg-noir border border-primary/20" />}
             <div className="flex-1 space-y-2">
               <input type="text" placeholder="URL de l'image" value={form.image_url} onChange={(e) => set("image_url", e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-noir border border-primary/20 text-sm focus:outline-none focus:border-primary" />
-              <div className="flex gap-2 flex-wrap">
-                <label className="inline-flex items-center gap-2 px-3 py-2 rounded-full glass-gold text-primary text-xs cursor-pointer hover:bg-primary/10">
-                  {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
-                  Uploader une image
-                  <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
-                </label>
-                <button type="button" onClick={generateInEditor}
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-primary/10 text-primary text-xs hover:bg-primary/20 transition">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Générer avec AI
-                </button>
-              </div>
+              <label className="inline-flex items-center gap-2 px-3 py-2 rounded-full glass-gold text-primary text-xs cursor-pointer hover:bg-primary/10">
+                {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+                Uploader une image
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
+              </label>
             </div>
           </div>
         </div>
