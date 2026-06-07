@@ -5,19 +5,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { fetchPerfumes, type Perfume, type PerfumeSize, type Category, type Gender, type StockStatus, categories, DEFAULT_SIZES } from "@/lib/api";
 import { Plus, Pencil, Trash2, X, Loader2, Star, StarOff, Upload, Sparkles } from "lucide-react";
 
-async function generateAIImage(perfume: { name: string; brand: string; category: string; scent: string; gender: string }): Promise<string> {
+function generateAIImage(perfume: { name: string; brand: string; scent: string; gender: string }): string {
   const prompt = encodeURIComponent(
     `luxury perfume bottle, ${perfume.name} by ${perfume.brand}, ${perfume.gender} fragrance, ${perfume.scent} scent, professional product photography, pure white background, studio lighting, photorealistic, high-end luxury glass bottle`
   );
   const seed = Math.floor(Math.random() * 999999);
-  const res = await fetch(`https://image.pollinations.ai/prompt/${prompt}?width=512&height=512&nologo=true&seed=${seed}`);
-  if (!res.ok) throw new Error("Génération échouée");
-  const blob = await res.blob();
-  const path = `ai-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
-  const { error } = await supabase.storage.from("perfume-images").upload(path, blob, { cacheControl: "31536000", upsert: false, contentType: "image/jpeg" });
-  if (error) throw error;
-  const { data: pub } = supabase.storage.from("perfume-images").getPublicUrl(path);
-  return pub.publicUrl;
+  return `https://image.pollinations.ai/prompt/${prompt}?width=512&height=512&nologo=true&seed=${seed}`;
 }
 
 export const Route = createFileRoute("/adminpannel/perfumes")({ component: AdminPerfumes });
@@ -48,7 +41,7 @@ function AdminPerfumes() {
   const generateImage = async (p: Perfume) => {
     setGenerating((prev) => new Set(prev).add(p.id));
     try {
-      const url = await generateAIImage(p);
+      const url = generateAIImage(p);
       await supabase.from("perfumes").update({ image_url: url }).eq("id", p.id);
       refresh();
     } catch (e) {
@@ -67,7 +60,7 @@ function AdminPerfumes() {
     try {
       for (const p of targets) {
         try {
-          const url = await generateAIImage(p);
+          const url = generateAIImage(p);
           await supabase.from("perfumes").update({ image_url: url }).eq("id", p.id);
         } catch { /* skip and continue */ }
         setGenProgress((prev) => ({ ...prev, done: prev.done + 1 }));
@@ -225,21 +218,12 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
   const [sizeStrs, setSizeStrs] = useState(() => (data.sizes ?? DEFAULT_SIZES).map((s) => String(s.price)));
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [generatingAI, setGeneratingAI] = useState(false);
 
   const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) => setForm((f) => ({ ...f, [k]: v }));
 
-  const generateInEditor = async () => {
+  const generateInEditor = () => {
     if (!form.name) { alert("Entrez d'abord un nom de parfum."); return; }
-    setGeneratingAI(true);
-    try {
-      const url = await generateAIImage(form);
-      set("image_url", url);
-    } catch (e) {
-      alert(e instanceof Error ? e.message : "Erreur de génération");
-    } finally {
-      setGeneratingAI(false);
-    }
+    set("image_url", generateAIImage(form));
   };
 
   const upload = async (file: File) => {
@@ -321,9 +305,9 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
                   Uploader une image
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
                 </label>
-                <button type="button" onClick={generateInEditor} disabled={generatingAI}
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-primary/10 text-primary text-xs hover:bg-primary/20 disabled:opacity-50 transition">
-                  {generatingAI ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                <button type="button" onClick={generateInEditor}
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-primary/10 text-primary text-xs hover:bg-primary/20 transition">
+                  <Sparkles className="w-3.5 h-3.5" />
                   Générer avec AI
                 </button>
               </div>
