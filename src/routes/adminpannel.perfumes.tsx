@@ -10,7 +10,7 @@ function generateAIImage(perfume: { name: string; brand: string; scent: string; 
     `luxury perfume bottle, ${perfume.name} by ${perfume.brand}, ${perfume.gender} fragrance, ${perfume.scent} scent, professional product photography, pure white background, studio lighting, photorealistic, high-end luxury glass bottle`
   );
   const seed = Math.floor(Math.random() * 999999);
-  return `https://image.pollinations.ai/prompt/${prompt}?width=512&height=512&nologo=true&seed=${seed}`;
+  return `https://image.pollinations.ai/prompt/${prompt}?width=512&height=512&nologo=true&seed=${seed}&model=turbo`;
 }
 
 export const Route = createFileRoute("/adminpannel/perfumes")({ component: AdminPerfumes });
@@ -218,12 +218,14 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
   const [sizeStrs, setSizeStrs] = useState(() => (data.sizes ?? DEFAULT_SIZES).map((s) => String(s.price)));
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
 
   const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) => setForm((f) => ({ ...f, [k]: v }));
 
   const generateInEditor = () => {
     if (!form.name) { alert("Entrez d'abord un nom de parfum."); return; }
     set("image_url", generateAIImage(form));
+    setImageLoading(true);
   };
 
   const upload = async (file: File) => {
@@ -295,7 +297,18 @@ function PerfumeEditor({ data, onClose, onSave }: { data: Omit<Perfume, "id"> & 
         <div>
           <label className="text-xs tracking-[0.15em] text-primary uppercase mb-1.5 block">Image</label>
           <div className="flex gap-3 items-center">
-            {form.image_url && <img src={form.image_url} alt="" className="h-20 w-20 object-contain rounded-lg bg-noir border border-primary/20" />}
+            {(form.image_url || imageLoading) && (
+              <div className="relative h-20 w-20 shrink-0">
+                <img src={form.image_url} alt="" className="h-20 w-20 object-contain rounded-lg bg-noir border border-primary/20"
+                  onLoad={() => setImageLoading(false)} onError={() => setImageLoading(false)} />
+                {imageLoading && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-noir/90 rounded-lg border border-primary/20">
+                    <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                    <span className="text-[9px] text-primary/70">Génération...</span>
+                  </div>
+                )}
+              </div>
+            )}
             <div className="flex-1 space-y-2">
               <input type="text" placeholder="URL de l'image" value={form.image_url} onChange={(e) => set("image_url", e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-noir border border-primary/20 text-sm focus:outline-none focus:border-primary" />
